@@ -15,9 +15,11 @@ class Grid:
         print(self.get_grid_lenght())
         for i in range(self.get_grid_lenght()):
             print("truc1")
+            self._truc = []
             for j in range(self._grid_lenght):
                 print("truc2")
-                self._grid.append(0)
+                self._truc.append(0)
+                self._grid.append(self._truc)
                 return self._grid
 
 
