@@ -1,3 +1,5 @@
+import json
+
 class Grid:
 
     def __init__(self):
@@ -9,7 +11,6 @@ class Grid:
         self._sentence = None
         self._grid = []
         self._mask = []
-
 
     def set_lenght(self):
         """
@@ -86,7 +87,13 @@ class Grid:
     def get_mask(self):
         return self._mask
 
-###################################################################
+    def save_json(self):
+        save_file = open("mask.json", "w")
+        json.dump(self.get_mask(), save_file, indent=6)
+        save_file.close()
+
+
+    ###################################################################
 
 
 grid = Grid()
