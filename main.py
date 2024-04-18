@@ -1,4 +1,6 @@
 import json
+import tkinter as tk
+
 
 class Grid:
 
@@ -93,12 +95,26 @@ class Grid:
         save_file.close()
 
 
-    ###################################################################
+class CipherUI:
+
+    def __init__(self):
+        self._grid = Grid()
+        self._root = tk.Tk()
+        self._root.title("Grilles tournantes de Fleissner")
+        self._canvas = tk.Canvas(self._root, height=700, width=700)
+
+        self._canvas.pack()
+        self._root.mainloop()
 
 
-grid = Grid()
+###################################################################
 
-grid.set_lenght()
-truc = grid.grid_fill()
-machin = grid.adapt_sentence()
-print(truc, machin)
+
+# grid = Grid()
+#
+# grid.set_lenght()
+# truc = grid.grid_fill()
+# machin = grid.adapt_sentence()
+# print(truc, "\n", machin)
+
+grid = CipherUI()
