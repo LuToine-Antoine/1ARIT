@@ -42,10 +42,12 @@ class Grid:
         """
         Create grid with input lenght, chunk by chunk in empty list
         """
-        chunk = []  # Create empty list
+        self._grid = []  # Create empty list
         for i in range(self.get_grid_lenght()):  # Loop to append 0 in chunk, compared to grid lenght
-            chunk.append(0)
+            chunk = []
             self._grid.append(chunk)
+            for j in range(self.get_grid_lenght()):
+                chunk.append(0)
 
         return self._grid
 
@@ -73,12 +75,28 @@ class Grid:
         return self._sentence
 
     def mask_fill(self):
-        chunkMask = []  # Create empty list
+        self._mask = []  # Create empty list
         for i in range(self.get_grid_lenght()):  # Loop to append 0 in chunk, compared to grid lenght
-            chunkMask.append(0)
+            chunkMask = []
             self._mask.append(chunkMask)
+            for j in range(self.get_grid_lenght()):
+                chunkMask.append(0)
 
         return self._mask
+
+    def get_json_mask(self):
+        """
+        Get the mask from json
+        """
+        with open("mask.json", "r") as file:
+            json_mask = file.read()
+
+        mask = json.loads(json_mask)
+
+        for item in mask:
+            print(item["personnal_mask"])
+        print("personnal", mask)
+        return mask
 
     def set_mask(self, x, y, mode):
         """
@@ -109,7 +127,8 @@ class Grid:
         for i in range(len(self._grid)):
             for j in range(len(self._grid[i])):
                 if self.get_mask()[i][j] == 1:
-                    self._grid[i][j] = sentence[i]
+                    self._grid[i][j] = sentence[0]
+                    sentence.pop(0)
                 if self.get_mask()[i][j] == 0:
                     lettre = chr(rand.randint(ord("a"), ord("z")))  # Random letter using ASCII
                     self._grid[i][j] = lettre
@@ -138,14 +157,18 @@ class CipherUI:
 
 grid = Grid()
 #
-grid.set_lenght()
-truc = grid.grid_fill()
-machin = grid.adapt_sentence()
-print(truc, "\n", machin)
-grid.mask_fill()
-grid.set_mask(0, 0, 1)
-grid.set_mask(0, 1, 1)
-grid.set_mask(0, 2, 1)
-grid.set_letter_in_grid()
+#grid.set_lenght()
+#truc = grid.grid_fill()
+#machin = grid.adapt_sentence()
+#print("grif fill", truc, "\n", "adapte", machin)
+#grid.mask_fill()
+#grid.set_mask(0, 0, 1)
+#grid.set_mask(0, 1, 1)
+#grid.set_mask(2, 1, 1)
+#grid.set_mask(0, 3, 1)
+#grid.set_mask(3, 0, 1)
+#print(*grid.get_mask())
+#grid.set_letter_in_grid()
 
+grid.get_json_mask()
 #grid = CipherUI()
