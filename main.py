@@ -106,6 +106,11 @@ class CipherUI:
         self._canvas.pack()
         self._root.mainloop()
 
+    # def draw_grid(self):
+
+    def darw_mask(self):
+
+
 
 ###################################################################
 
