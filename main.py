@@ -1,6 +1,7 @@
 import json
 import tkinter as tk
 import random as rand
+from tkinter.filedialog import askopenfilename
 
 
 class Grid:
@@ -143,6 +144,14 @@ class CipherUI:
         self._root.title("Grilles tournantes de Fleissner")
         self._canvas = tk.Canvas(self._root, height=700, width=700)
 
+        frame_grid_bg = tk.Frame(self._root, borderwidth=2, bg="black", relief="groove")
+        frame_grid_bg.pack(side="right", padx=10, pady=10)
+        frame_grid = tk.Frame(frame_grid_bg, borderwidth=2, relief="groove")
+        frame_grid.pack(side="right", padx=10, pady=10)
+
+        tk.Label(frame_grid_bg, text="Frame 2").pack(padx=10, pady=10)
+        tk.Label(frame_grid, text="Frame 3", bg="white").pack(padx=10, pady=10)
+
         self._canvas.pack()
         self._root.mainloop()
 
@@ -150,12 +159,21 @@ class CipherUI:
 
     #def draw_mask(self):
 
+    def gather_file(self):
+        filename = askopenfilename(title="Ouvrir votre document",
+                                   filetypes=[('txt files', '.txt'), ('all files', '.*')])
+        fichier = open(filename, "r")
+        content = fichier.read()
+        fichier.close()
+
+        tk.Label(self._root, text=content).pack(padx=10, pady=10)
+
 
 
 ###################################################################
 
 
-grid = Grid()
+# grid = Grid()
 #
 #grid.set_lenght()
 #truc = grid.grid_fill()
@@ -170,5 +188,6 @@ grid = Grid()
 #print(*grid.get_mask())
 #grid.set_letter_in_grid()
 
-grid.get_json_mask()
-#grid = CipherUI()
+# grid.get_json_mask()
+
+grid = CipherUI()
