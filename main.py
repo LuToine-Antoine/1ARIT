@@ -1,5 +1,6 @@
 import json
 import tkinter as tk
+import random as rand
 
 
 class Grid:
@@ -8,7 +9,6 @@ class Grid:
         """
         Initialize grid (length, sentence to cipher and grid)
         """
-        self._letters = "abcdefghijklmnopqrstuvwxyz"
         self._grid_lenght = None
         self._sentence = None
         self._grid = []
@@ -81,18 +81,39 @@ class Grid:
         return self._mask
 
     def set_mask(self, x, y, mode):
+        """
+        Set the mask (0 and 1)
+        """
         if mode == 0:
             self._mask[x][y] = 0
         elif mode == 1:
             self._mask[x][y] = 1
 
     def get_mask(self):
+        """
+        Get the mask
+        """
         return self._mask
 
     def save_json(self):
+        """
+        Save the mask at json
+        """
         save_file = open("mask.json", "w")
         json.dump(self.get_mask(), save_file, indent=6)
         save_file.close()
+
+    def set_letter_in_grid(self):
+        sentence = list(self._sentence)
+        print(sentence)
+        for i in range(len(self._grid)):
+            for j in range(len(self._grid[i])):
+                if self.get_mask()[i][j] == 1:
+                    self._grid[i][j] = sentence[i]
+                if self.get_mask()[i][j] == 0:
+                    lettre = chr(rand.randint(ord("a"), ord("z")))  # Random letter using ASCII
+                    self._grid[i][j] = lettre
+        print(self._grid)
 
 
 class CipherUI:
@@ -108,18 +129,23 @@ class CipherUI:
 
     # def draw_grid(self):
 
-    def darw_mask(self):
+    #def draw_mask(self):
 
 
 
 ###################################################################
 
 
-# grid = Grid()
+grid = Grid()
 #
-# grid.set_lenght()
-# truc = grid.grid_fill()
-# machin = grid.adapt_sentence()
-# print(truc, "\n", machin)
+grid.set_lenght()
+truc = grid.grid_fill()
+machin = grid.adapt_sentence()
+print(truc, "\n", machin)
+grid.mask_fill()
+grid.set_mask(0, 0, 1)
+grid.set_mask(0, 1, 1)
+grid.set_mask(0, 2, 1)
+grid.set_letter_in_grid()
 
-grid = CipherUI()
+#grid = CipherUI()
