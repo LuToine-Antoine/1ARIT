@@ -2,7 +2,6 @@ import copy
 import json
 import tkinter as tk
 import random as rand
-from math import cos, sin, radians
 from tkinter.filedialog import askopenfilename
 
 class Grid:
@@ -86,24 +85,25 @@ class Grid:
 
         return self._mask
 
-    #def get_json_mask(self):
-    #    """
-    #    Get the mask from json
-    #    """
-    #    with open("mask.json", "r") as file:
-    #        json_mask = file.read()
+    def get_text_mask(self):
+        """
+        Get the mask from txt file
+        """
+        myMask = open("mask_test.txt", "r")
+        saveMask = []
+        for line in myMask:
+            line = line.strip()  # Remove line break
+            row = []
+            for char in line:
+                row.append(int(char))
+            saveMask.append(row)
+        return saveMask
 
-    #    mask = json.loads(json_mask)
-
-    #    for item in mask:
-    #        print(item["personnal_mask"])
-    #    print("personnal", mask)
-    #    return mask
-
-    def set_mask(self, model):
+    def set_mask(self):
         """
         Set the mask (0 and 1)
         """
+        model = self.get_text_mask()
         for i in range(len(model)):
             for j in range(len(model)):
                 self._mask[i][j] = model[i][j]
@@ -145,19 +145,17 @@ class Grid:
 
     def set_letter_in_grid(self):
         sentence = list(self._sentence)
-        print(sentence)
         tour = 0
         mask_copy = copy.deepcopy(self.get_mask())
         while tour < 4 and sentence:
             for i in range(len(self._grid)):
                 for j in range(len(self._grid[i])):
-                    if self.get_mask()[i][j] == 1 and sentence  :
+                    if self.get_mask()[i][j] == 1 and sentence :
                         self._grid[i][j] = sentence.pop(0)
                         mask_copy[i][j] = 2  # Set letter
 
                     if self.get_mask()[i][j] == 0 and mask_copy[i][j] == 0:
-                        #lettre = chr(rand.randint(ord("a"), ord("z")))  # Random letter using ASCII
-                        lettre = rand.randint(6,7)  # Random letter using ASCII
+                        lettre = chr(rand.randint(ord("a"), ord("z")))  # Random letter using ASCII
                         self._grid[i][j] = lettre
 
             self.mask_rotation()
@@ -209,17 +207,11 @@ truc = grid.grid_fill()
 machin = grid.adapt_sentence()
 #print("grif fill", truc, "\n", "adapte", machin)
 grid.mask_fill()
-modeletest = [[0,1,0,1,0,1],
-                      [0,0,0,0,1,0],
-                      [0,0,1,0,0,0],
-                      [0,1,0,0,1,0],
-                      [0,0,0,0,0,1],
-                      [0,0,0,1,0,0]]
-grid.set_mask(modeletest)
-print(*grid.get_mask())
-
+grid.set_mask()
+grid.get_text_mask()
 grille = grid.set_letter_in_grid()
-print(grille)
+for row in grille:
+    print(row)
 # grid.get_json_mask()
 
 #grid = CipherUI()
