@@ -1,8 +1,8 @@
 import json
 import tkinter as tk
 import random as rand
+from math import cos, sin, radians
 from tkinter.filedialog import askopenfilename
-
 
 class Grid:
 
@@ -85,24 +85,26 @@ class Grid:
 
         return self._mask
 
-    def get_json_mask(self):
-        """
-        Get the mask from json
-        """
-        with open("mask.json", "r") as file:
-            json_mask = file.read()
+    #def get_json_mask(self):
+    #    """
+    #    Get the mask from json
+    #    """
+    #    with open("mask.json", "r") as file:
+    #        json_mask = file.read()
 
-        mask = json.loads(json_mask)
+    #    mask = json.loads(json_mask)
 
-        for item in mask:
-            print(item["personnal_mask"])
-        print("personnal", mask)
-        return mask
+    #    for item in mask:
+    #        print(item["personnal_mask"])
+    #    print("personnal", mask)
+    #    return mask
 
     def set_mask(self, x, y, mode):
         """
         Set the mask (0 and 1)
         """
+        #  for x in:
+        #  for j in:
         if mode == 0:
             self._mask[x][y] = 0
         elif mode == 1:
@@ -112,6 +114,27 @@ class Grid:
         """
         Get the mask
         """
+        return self._mask
+
+    def mask_rotation(self):
+        """
+        Rotate the mask
+        """
+        masque = self.get_mask()
+        n = len(masque)
+
+        emptyMask = []  # Create empty list to append rotating mask and return this mask from the "copy"
+        for i in range(n):
+            chunkMask = []
+            emptyMask.append(chunkMask)
+            for j in range(n):
+                chunkMask.append(0)
+
+        for i in range(n):
+            for j in range(n):
+                emptyMask[j][n - 1 - i] = masque[i][j]  # Put coordinate rotation to the "emptyMask"
+
+        self._mask = emptyMask  # Set the emptymask to the mask
         return self._mask
 
     def save_json(self):
@@ -173,21 +196,22 @@ class CipherUI:
 ###################################################################
 
 
-# grid = Grid()
+grid = Grid()
 #
-#grid.set_lenght()
-#truc = grid.grid_fill()
-#machin = grid.adapt_sentence()
+grid.set_lenght()
+truc = grid.grid_fill()
+machin = grid.adapt_sentence()
 #print("grif fill", truc, "\n", "adapte", machin)
-#grid.mask_fill()
-#grid.set_mask(0, 0, 1)
-#grid.set_mask(0, 1, 1)
-#grid.set_mask(2, 1, 1)
-#grid.set_mask(0, 3, 1)
-#grid.set_mask(3, 0, 1)
-#print(*grid.get_mask())
+grid.mask_fill()
+grid.set_mask(0, 0, 1)
+grid.set_mask(0, 1, 1)
+grid.set_mask(2, 1, 1)
+grid.set_mask(0, 3, 1)
+grid.set_mask(3, 0, 1)
+print(*grid.get_mask())
+grid.mask_rotation()
 #grid.set_letter_in_grid()
 
 # grid.get_json_mask()
 
-grid = CipherUI()
+#grid = CipherUI()
