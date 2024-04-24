@@ -139,7 +139,7 @@ class Grid:
         """
         Save the mask at json
         """
-        save_file = open("mask.json", "w")
+        save_file = open("mask_test.txt", "w")
         json.dump(self.get_mask(), save_file, indent=6)
         save_file.close()
 
@@ -162,6 +162,26 @@ class Grid:
             tour += 1
         return self._grid
 
+    def decipher(self):
+        #setenceToDecipher = list(decipherSentence)
+        #decipherGrid = []
+        #for i in range(self.get_grid_lenght()):
+         #   chunk = []
+          #  decipherGrid.append(chunk)
+           # for j in range(self.get_grid_lenght()):
+            #    chunk.append(setenceToDecipher.pop(0))
+
+        deciphered = []
+        tour = 0
+        while tour < 4 :
+            for i in range(len(self._grid)):
+                for j in range(len(self._grid[i])):
+                    if self.get_mask()[i][j] == 1:
+                        deciphered.append(self._grid[i][j])
+
+            self.mask_rotation()
+            tour += 1
+        return deciphered
 
 class CipherUI:
 
@@ -208,16 +228,18 @@ class CipherUI:
 
 
 grid = Grid()
-# grid.set_lenght()
-# truc = grid.grid_fill()
-# machin = grid.adapt_sentence()
+grid.set_lenght()
+truc = grid.grid_fill()
+machin = grid.adapt_sentence()
 # print("grif fill", truc, "\n", "adapte", machin)
-# grid.mask_fill()
-# grid.set_mask()
-# grid.get_text_mask()
-# grille = grid.set_letter_in_grid()
-# for row in grille:
-#     print(row)
-# grid.get_json_mask()
+grid.mask_fill()
+grid.set_mask()
+grid.get_text_mask()
+grille = grid.set_letter_in_grid()
+for row in grille:
+    print(row)
+essaie = grid.decipher()
+print(*essaie)
+#grid.get_json_mask()
 
-grid_ui = CipherUI()
+#grid_ui = CipherUI()
