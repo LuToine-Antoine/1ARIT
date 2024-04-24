@@ -174,12 +174,14 @@ class CipherUI:
         self._text_to_cipher = tk.Text(self._canvas, height=5, width=70)
         self._frm_text_to_cypher = tk.Frame(self._canvas, borderwidth=2)
 
+        self._test_frm = tk.Frame(self._canvas)
+        self._test_frm.pack(side=tk.LEFT)
 
-        self._text_to_cipher.grid(sticky=tk.NSEW)
+        self._frm_text_to_cypher.pack(self._text_to_cipher, side=tk.LEFT)
 
         tk.Label(self._frm_text_to_cypher, text="test").pack(side=tk.LEFT)
 
-        self._frm_text_to_cypher.pack(side=tk.LEFT)
+        self._frm_text_to_cypher.pack()
         self._canvas.pack()
         self._root.mainloop()
 
