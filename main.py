@@ -171,18 +171,23 @@ class CipherUI:
         self._root.title("Grilles tournantes de Fleissner")
         self._canvas = tk.Canvas(self._root, height=700, width=700)
 
-        frame_grid_bg = tk.Frame(self._root, borderwidth=2, bg="black", relief="groove")
-        frame_grid_bg.pack(side="right", padx=10, pady=10)
-        frame_grid = tk.Frame(frame_grid_bg, borderwidth=2, relief="groove")
-        frame_grid.pack(side="right", padx=10, pady=10)
+        self._text_to_cipher = tk.Text(self._canvas, height=5, width=70)
+        self._frm_text_to_cypher = tk.Frame(self._canvas, borderwidth=2)
 
-        tk.Label(frame_grid_bg, text="Frame 2").pack(padx=10, pady=10)
-        tk.Label(frame_grid, text="Frame 3", bg="white").pack(padx=10, pady=10)
 
+        self._text_to_cipher.grid(sticky=tk.NSEW)
+
+        tk.Label(self._frm_text_to_cypher, text="test").pack(side=tk.LEFT)
+
+        self._frm_text_to_cypher.pack(side=tk.LEFT)
         self._canvas.pack()
         self._root.mainloop()
 
     # def draw_grid(self):
+    #     grid_len = self._grid.get_grid_lenght()
+    #     print(grid_len)
+    #     if grid_len % 2 == 0:
+    #         self._canvas.create_rectangle(50, 50, 200, 150, fill="white", outline="black")
 
     #def draw_mask(self):
 
@@ -201,17 +206,16 @@ class CipherUI:
 
 
 grid = Grid()
-#
-grid.set_lenght()
-truc = grid.grid_fill()
-machin = grid.adapt_sentence()
-#print("grif fill", truc, "\n", "adapte", machin)
-grid.mask_fill()
-grid.set_mask()
-grid.get_text_mask()
-grille = grid.set_letter_in_grid()
-for row in grille:
-    print(row)
+# grid.set_lenght()
+# truc = grid.grid_fill()
+# machin = grid.adapt_sentence()
+# print("grif fill", truc, "\n", "adapte", machin)
+# grid.mask_fill()
+# grid.set_mask()
+# grid.get_text_mask()
+# grille = grid.set_letter_in_grid()
+# for row in grille:
+#     print(row)
 # grid.get_json_mask()
 
-#grid = CipherUI()
+grid_ui = CipherUI()
