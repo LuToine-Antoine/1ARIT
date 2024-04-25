@@ -4,6 +4,7 @@ import tkinter as tk
 import random as rand
 from tkinter.filedialog import askopenfilename
 
+
 class Grid:
 
     def __init__(self):
@@ -58,7 +59,7 @@ class Grid:
         """
         self.set_sentence()
         replaceCaractere = {"e": "éèêë", "a": "àâä", "u": "ùûü", "i": "îï", "o": "ôö",
-                            "c": "ç", "" : "',;:!?./§$"}  # Dictionnary of special letters
+                            "c": "ç", "": "',;:!?./§$"}  # Dictionnary of special letters
         tempsSentence = self.get_sentence().lower()  # Set sentence to lower
         tempsSentence = tempsSentence.replace(" ", "")  # Remove space
 
@@ -138,12 +139,12 @@ class Grid:
         return self._mask
 
     #def save_json(self):
-     #   """
-      #  Save the mask at json
-       # """
-        #save_file = open("mask.txt", "w")
-        #json.dump(self.get_mask(), save_file, indent=6)
-        #save_file.close()
+    #   """
+    #  Save the mask at json
+    # """
+    #save_file = open("mask.txt", "w")
+    #json.dump(self.get_mask(), save_file, indent=6)
+    #save_file.close()
 
     def set_letter_in_grid(self):
         sentence = list(self._sentence)
@@ -188,6 +189,7 @@ class Grid:
             self.mask_rotation()
         return deciphered
 
+
 class CipherUI:
 
     def __init__(self):
@@ -196,17 +198,21 @@ class CipherUI:
         self._root.title("Grilles tournantes de Fleissner")
         self._canvas = tk.Canvas(self._root, height=700, width=700)
 
-        self._text_to_cipher = tk.Text(self._canvas, height=5, width=70)
-        self._frm_text_to_cypher = tk.Frame(self._canvas, borderwidth=2)
+        self._text_to_cipher = tk.Text(self._canvas, height=5, width=70, relief=tk.GROOVE)
+        self._text_ciphered = tk.Text(self._canvas, height=5, width=70, relief=tk.GROOVE)
 
-        self._test_frm = tk.Frame(self._canvas)
-        self._test_frm.pack(side=tk.LEFT)
+        self._text_to_cipher.pack()
+        self._text_ciphered.pack()
 
-        self._frm_text_to_cypher.pack(self._text_to_cipher, side=tk.LEFT)
+        test = tk.Label(self._canvas, text="Test")
+        test.pack()
 
-        tk.Label(self._frm_text_to_cypher, text="test").pack(side=tk.LEFT)
+        panneau_cypher = tk.PanedWindow(self._canvas, orient=tk.HORIZONTAL)
+        panneau_cypher.add(self._text_to_cipher)
+        panneau_cypher.add(test)
+        panneau_cypher.pack(side=tk.LEFT)
 
-        self._frm_text_to_cypher.pack()
+
         self._canvas.pack()
         self._root.mainloop()
 
@@ -216,37 +222,29 @@ class CipherUI:
     #     if grid_len % 2 == 0:
     #         self._canvas.create_rectangle(50, 50, 200, 150, fill="white", outline="black")
 
-    #def draw_mask(self):
+    # def draw_mask(self):
 
-    def gather_file(self):
-        filename = askopenfilename(title="Ouvrir votre document",
-                                   filetypes=[('txt files', '.txt'), ('all files', '.*')])
-        fichier = open(filename, "r")
-        content = fichier.read()
-        fichier.close()
-
-        tk.Label(self._root, text=content).pack(padx=10, pady=10)
-
+    # def gather_file(self):
 
 
 ###################################################################
 
 
-grid = Grid()
-grid.set_lenght()
-truc = grid.grid_fill()
-machin = grid.adapt_sentence()
-#print("grif fill", truc, "\n", "adapte", machin)
+# grid = Grid()
+# grid.set_lenght()
+# truc = grid.grid_fill()
+# machin = grid.adapt_sentence()
+# print("grif fill", truc, "\n", "adapte", machin)
 
-grid.mask_fill()
-grid.set_mask()
-grid.get_text_mask()
-grille = grid.set_letter_in_grid()
+# grid.mask_fill()
+# grid.set_mask()
+# grid.get_text_mask()
+# grille = grid.set_letter_in_grid()
 
 
-essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeqcnauupinetsyacilfonseeitdeoabudpsshlkyrppelcuivieailoyewlshysybacwdcmeujcixmysaeculmnfwsiasuanlvatseedaakniortptwarbxlioordsuztycewulwsioelldgekdeelnbjtiojloeqyctwhtahvvetswoxoxrlheda")
-#essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeucnauuxinatsyacinionseuitdeaajurpsssluynyppelccivieailfzewlshhsybacywcseugcismqsaesulmtfnxqasuanlsatseedazkniortptwqrclligofdsuwtycewxensioelldgekgpewnbjtrojxoezyctwhtahnwetswowoprlhedt")
-print("déchifré " , *essaie)
-#grid.get_json_mask()
+# essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeqcnauupinetsyacilfonseeitdeoabudpsshlkyrppelcuivieailoyewlshysybacwdcmeujcixmysaeculmnfwsiasuanlvatseedaakniortptwarbxlioordsuztycewulwsioelldgekdeelnbjtiojloeqyctwhtahvvetswoxoxrlheda")
+# essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeucnauuxinatsyacinionseuitdeaajurpsssluynyppelccivieailfzewlshhsybacywcseugcismqsaesulmtfnxqasuanlsatseedazkniortptwqrclligofdsuwtycewxensioelldgekgpewnbjtrojxoezyctwhtahnwetswowoprlhedt")
+# print("déchifré " , *essaie)
+# grid.get_json_mask()
 
-#grid_ui = CipherUI()
+grid_ui = CipherUI()
