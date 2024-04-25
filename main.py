@@ -58,7 +58,7 @@ class Grid:
         """
         self.set_sentence()
         replaceCaractere = {"e": "éèêë", "a": "àâä", "u": "ùûü", "i": "îï", "o": "ôö",
-                            "c": "ç"}  # Dictionnary of special letters
+                            "c": "ç", "" : "',;:!?./§$"}  # Dictionnary of special letters
         tempsSentence = self.get_sentence().lower()  # Set sentence to lower
         tempsSentence = tempsSentence.replace(" ", "")  # Remove space
 
@@ -67,6 +67,7 @@ class Grid:
                 tempsSentence = tempsSentence.replace(i, key)
 
         lenOfSentence = len(tempsSentence) - 1  # Set sentence lenght
+
         while lenOfSentence > 0:  # Loop to remove other sepcial caractere, using not lenght fix because, with remeving, the lenght change
             if tempsSentence[lenOfSentence] not in "abcdefghijklmnopqrstuvwxyz":
                 tempsSentence = tempsSentence.replace(tempsSentence[lenOfSentence], "")
@@ -89,7 +90,7 @@ class Grid:
         """
         Get the mask from txt file
         """
-        myMask = open("mask_test.txt", "r")
+        myMask = open("mask.txt", "r")
         saveMask = []
         for line in myMask:
             line = line.strip()  # Remove line break
@@ -131,17 +132,18 @@ class Grid:
         for i in range(n):
             for j in range(n):
                 emptyMask[j][n - 1 - i] = masque[i][j]  # Put coordinate rotation to the "emptyMask"
+                #emptyMask[n - 1- j][i] = masque[i][j]  # Put coordinate rotation to the "emptyMask"
 
         self._mask = emptyMask  # Set the emptymask to the mask
         return self._mask
 
-    def save_json(self):
-        """
-        Save the mask at json
-        """
-        save_file = open("mask_test.txt", "w")
-        json.dump(self.get_mask(), save_file, indent=6)
-        save_file.close()
+    #def save_json(self):
+     #   """
+      #  Save the mask at json
+       # """
+        #save_file = open("mask.txt", "w")
+        #json.dump(self.get_mask(), save_file, indent=6)
+        #save_file.close()
 
     def set_letter_in_grid(self):
         sentence = list(self._sentence)
@@ -150,7 +152,7 @@ class Grid:
         while tour < 4 and sentence:
             for i in range(len(self._grid)):
                 for j in range(len(self._grid[i])):
-                    if self.get_mask()[i][j] == 1 and sentence :
+                    if self.get_mask()[i][j] == 1 and sentence:
                         self._grid[i][j] = sentence.pop(0)
                         mask_copy[i][j] = 2  # Set letter
 
@@ -160,27 +162,30 @@ class Grid:
 
             self.mask_rotation()
             tour += 1
+
         return self._grid
 
-    def decipher(self):
-        #setenceToDecipher = list(decipherSentence)
-        #decipherGrid = []
-        #for i in range(self.get_grid_lenght()):
-         #   chunk = []
-          #  decipherGrid.append(chunk)
-           # for j in range(self.get_grid_lenght()):
-            #    chunk.append(setenceToDecipher.pop(0))
+    def decipher(self, decipherSentence):
+        setenceToDecipher = list(decipherSentence)
+        decipherGrid = []
+        for i in range(self.get_grid_lenght()):
+            chunk = []
+            decipherGrid.append(chunk)
+            for j in range(self.get_grid_lenght()):
+                if setenceToDecipher:
+                    chunk.append(setenceToDecipher.pop(0))
+                else:
+                    chunk.append('')
 
+        self._mask = self.get_text_mask()
         deciphered = []
-        tour = 0
-        while tour < 4 :
-            for i in range(len(self._grid)):
-                for j in range(len(self._grid[i])):
-                    if self.get_mask()[i][j] == 1:
-                        deciphered.append(self._grid[i][j])
 
+        for _ in range(4):
+            for i in range(len(decipherGrid)):
+                for j in range(len(decipherGrid)):
+                    if self._mask[i][j] == 1:
+                        deciphered.append(decipherGrid[i][j])
             self.mask_rotation()
-            tour += 1
         return deciphered
 
 class CipherUI:
@@ -231,15 +236,17 @@ grid = Grid()
 grid.set_lenght()
 truc = grid.grid_fill()
 machin = grid.adapt_sentence()
-# print("grif fill", truc, "\n", "adapte", machin)
+#print("grif fill", truc, "\n", "adapte", machin)
+
 grid.mask_fill()
 grid.set_mask()
 grid.get_text_mask()
 grille = grid.set_letter_in_grid()
-for row in grille:
-    print(row)
-essaie = grid.decipher()
-print(*essaie)
+
+
+essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeqcnauupinetsyacilfonseeitdeoabudpsshlkyrppelcuivieailoyewlshysybacwdcmeujcixmysaeculmnfwsiasuanlvatseedaakniortptwarbxlioordsuztycewulwsioelldgekdeelnbjtiojloeqyctwhtahvvetswoxoxrlheda")
+#essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeucnauuxinatsyacinionseuitdeaajurpsssluynyppelccivieailfzewlshhsybacywcseugcismqsaesulmtfnxqasuanlsatseedazkniortptwqrclligofdsuwtycewxensioelldgekgpewnbjtrojxoezyctwhtahnwetswowoprlhedt")
+print("déchifré " , *essaie)
 #grid.get_json_mask()
 
 #grid_ui = CipherUI()
