@@ -196,23 +196,34 @@ class CipherUI:
         self._grid = Grid()
         self._root = tk.Tk()
         self._root.title("Grilles tournantes de Fleissner")
-        self._canvas = tk.Canvas(self._root, height=700, width=700)
+        self._canvas = tk.Canvas(self._root, height=7000, width=700)
 
-        self._text_to_cipher = tk.Text(self._canvas, height=5, width=70, relief=tk.GROOVE)
-        self._text_ciphered = tk.Text(self._canvas, height=5, width=70, relief=tk.GROOVE)
+        self._text_to_cipher = tk.Text(self._canvas, height=5, width=70, relief="groove")
+        self._text_ciphered = tk.Text(self._canvas, height=5, width=70, relief="groove")
+
+        self._input_text_to_cipher = tk.Text(self._canvas, height=5, width=70, relief="groove").get("1.0", "end-1c")
+        self._input_text_ciphered = tk.Text(self._canvas, height=5, width=70, relief="groove").get("1.0", "end-1c")
+
+        self._cypher_button = tk.Button(self._canvas, height=2, width=20, text="Cypher")
+        self._decypher_button = tk.Button(self._canvas, height=2, width=20, text="Decypher")
+        self._clear_button = tk.Button(self._canvas, height=2, width=20, text="Clear")
+        self._clock = tk.Checkbutton(self._canvas, height=2, width=20, text="Clock")
+
+        label_test = tk.Label(text="truc")
+        frm_test = tk.Frame(self._canvas)
+        frm_test_3 = tk.Frame(label_test)
+        frm_test_2 = tk.Frame(frm_test_3)
+
+
 
         self._text_to_cipher.pack()
-        self._text_ciphered.pack()
-
-        test = tk.Label(self._canvas, text="Test")
-        test.pack()
-
-        panneau_cypher = tk.PanedWindow(self._canvas, orient=tk.HORIZONTAL)
-        panneau_cypher.add(self._text_to_cipher)
-        panneau_cypher.add(test)
-        panneau_cypher.pack(side=tk.LEFT)
-
-
+        self._cypher_button.pack(padx=5, pady=5)
+        self._decypher_button.pack(padx=5, pady=5)
+        self._clear_button.pack(padx=5, pady=5)
+        self._clock.pack()
+        self._text_ciphered.pack(side="bottom")
+        label_test.pack(side="left")
+        frm_test.pack()
         self._canvas.pack()
         self._root.mainloop()
 
