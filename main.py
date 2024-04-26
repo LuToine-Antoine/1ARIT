@@ -198,32 +198,37 @@ class CipherUI:
         self._root.title("Grilles tournantes de Fleissner")
         self._canvas = tk.Canvas(self._root, height=7000, width=700)
 
+        # Initialisation des groupes
+        self._cypher_group = tk.Frame(self._canvas)
+        self._cypher_group.place(relx=100, rely=700, anchor="center")
+        self._center_button_group = tk.Frame(self._canvas)
+        self._decypher_group = tk.Frame(self._canvas)
+
+        # Initlialisation des espaces de text qui accueilleront les messages coddés et décoddés.
         self._text_to_cipher = tk.Text(self._canvas, height=5, width=70, relief="groove")
         self._text_ciphered = tk.Text(self._canvas, height=5, width=70, relief="groove")
 
+        # Récupération des données saisies dans les zones de texte
         self._input_text_to_cipher = tk.Text(self._canvas, height=5, width=70, relief="groove").get("1.0", "end-1c")
         self._input_text_ciphered = tk.Text(self._canvas, height=5, width=70, relief="groove").get("1.0", "end-1c")
 
+        # Initialisation des bouttons centraux
         self._cypher_button = tk.Button(self._canvas, height=2, width=20, text="Cypher")
         self._decypher_button = tk.Button(self._canvas, height=2, width=20, text="Decypher")
         self._clear_button = tk.Button(self._canvas, height=2, width=20, text="Clear")
         self._clock = tk.Checkbutton(self._canvas, height=2, width=20, text="Clock")
 
-        label_test = tk.Label(text="truc")
-        frm_test = tk.Frame(self._canvas)
-        frm_test_3 = tk.Frame(label_test)
-        frm_test_2 = tk.Frame(frm_test_3)
+        # Textes a afficher
+        self._clear_txt = tk.Label(self._cypher_group, height=5, width=70, relief="groove", text="truc")
 
 
-
+        # Affichage des éléments sur la fenêtre
         self._text_to_cipher.pack()
         self._cypher_button.pack(padx=5, pady=5)
         self._decypher_button.pack(padx=5, pady=5)
         self._clear_button.pack(padx=5, pady=5)
         self._clock.pack()
-        self._text_ciphered.pack(side="bottom")
-        label_test.pack(side="left")
-        frm_test.pack()
+        self._text_ciphered.pack()
         self._canvas.pack()
         self._root.mainloop()
 
