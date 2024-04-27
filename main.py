@@ -16,11 +16,11 @@ class Grid:
         self._grid = []
         self._mask = []
 
-    def set_lenght(self):
+    def set_lenght(self, len_word):
         """
         Set the grid lenght
         """
-        self._grid_lenght = int(input("Enter grid lenght: "))
+        self._grid_lenght = len_word
 
     def get_grid_lenght(self):
         """
@@ -189,15 +189,14 @@ class Grid:
             self.mask_rotation()
         return deciphered
 
-    def cipher(self):
-        self.set_lenght()
+    def cipher(self, len_cypher):
+        self.set_lenght(len(len_cypher))
         self.grid_fill()
         self.adapt_sentence()
         self.mask_fill()
         self.set_mask()
         self.get_text_mask()
-        grille = grid.set_letter_in_grid()
-
+        grille = self.set_letter_in_grid()
 
         cipherGrille = ''
 
@@ -205,7 +204,7 @@ class Grid:
             for letter in row:
                 cipherGrille += letter
 
-        print("grille", cipherGrille)
+        return cipherGrille
 
 class CipherUI:
 
@@ -253,7 +252,8 @@ class CipherUI:
 
     def cypher_button(self):
         text_to_cypher = self._input_text_to_cipher
-        self._text_to_cipher.insert(tk.END, text_to_cypher)
+        cyphered_text = self._grid.cipher(text_to_cypher)
+        self._text_to_cipher.insert(tk.END, cyphered_text)
 
     # def draw_grid(self):
     #     grid_len = self._grid.get_grid_lenght()
@@ -269,8 +269,8 @@ class CipherUI:
 ###################################################################
 
 
-grid = Grid()
-grid.cipher()
+#grid = Grid()
+#grid.cipher()
 
 # essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeqcnauupinetsyacilfonseeitdeoabudpsshlkyrppelcuivieailoyewlshysybacwdcmeujcixmysaeculmnfwsiasuanlvatseedaakniortptwarbxlioordsuztycewulwsioelldgekdeelnbjtiojloeqyctwhtahvvetswoxoxrlheda")
 # essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeucnauuxinatsyacinionseuitdeaajurpsssluynyppelccivieailfzewlshhsybacywcseugcismqsaesulmtfnxqasuanlsatseedazkniortptwqrclligofdsuwtycewxensioelldgekgpewnbjtrojxoezyctwhtahnwetswowoprlhedt")
