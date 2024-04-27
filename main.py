@@ -196,11 +196,12 @@ class CipherUI:
         self._grid = Grid()
         self._root = tk.Tk()
         self._root.title("Grilles tournantes de Fleissner")
-        self._canvas = tk.Canvas(self._root, height=7000, width=700)
+        self._canvas = tk.Canvas(self._root, height=700, width=900)
+
 
         # Initialisation des groupes
         self._cypher_group = tk.Frame(self._canvas)
-        self._cypher_group.place(relx=100, rely=700, anchor="center")
+        self._cypher_group.place(relx=0, rely=0, anchor="center")
         self._center_button_group = tk.Frame(self._canvas)
         self._decypher_group = tk.Frame(self._canvas)
 
@@ -213,24 +214,29 @@ class CipherUI:
         self._input_text_ciphered = tk.Text(self._canvas, height=5, width=70, relief="groove").get("1.0", "end-1c")
 
         # Initialisation des bouttons centraux
-        self._cypher_button = tk.Button(self._canvas, height=2, width=20, text="Cypher")
-        self._decypher_button = tk.Button(self._canvas, height=2, width=20, text="Decypher")
-        self._clear_button = tk.Button(self._canvas, height=2, width=20, text="Clear")
-        self._clock = tk.Checkbutton(self._canvas, height=2, width=20, text="Clock")
+        self._cypher_button = tk.Button(self._center_button_group, height=2, width=20, text="Cypher", command= self.cypher_button())
+        self._decypher_button = tk.Button(self._center_button_group, height=2, width=20, text="Decypher")
+        self._clear_button = tk.Button(self._center_button_group, height=2, width=20, text="Clear")
+        self._clock = tk.Checkbutton(self._center_button_group, height=2, width=20, text="Clock")
 
         # Textes a afficher
         self._clear_txt = tk.Label(self._cypher_group, height=5, width=70, relief="groove", text="truc")
-
+        self._clear_txt.pack(side="left")
 
         # Affichage des éléments sur la fenêtre
         self._text_to_cipher.pack()
-        self._cypher_button.pack(padx=5, pady=5)
-        self._decypher_button.pack(padx=5, pady=5)
-        self._clear_button.pack(padx=5, pady=5)
+        self._cypher_button.pack(padx=5, pady=5, side="left")
+        self._decypher_button.pack(padx=5, pady=5, side="left")
+        self._clear_button.pack(padx=5, pady=5, side="left")
         self._clock.pack()
+        self._center_button_group.pack(padx=5, pady=5)
         self._text_ciphered.pack()
         self._canvas.pack()
         self._root.mainloop()
+
+    def cypher_button(self):
+        text_to_cypher = self._input_text_to_cipher
+        self._text_to_cipher.insert(tk.END, text_to_cypher)
 
     # def draw_grid(self):
     #     grid_len = self._grid.get_grid_lenght()
