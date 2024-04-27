@@ -189,6 +189,23 @@ class Grid:
             self.mask_rotation()
         return deciphered
 
+    def cipher(self):
+        self.set_lenght()
+        self.grid_fill()
+        self.adapt_sentence()
+        self.mask_fill()
+        self.set_mask()
+        self.get_text_mask()
+        grille = grid.set_letter_in_grid()
+
+
+        cipherGrille = ''
+
+        for row in grille:
+            for letter in row:
+                cipherGrille += letter
+
+        print("grille", cipherGrille)
 
 class CipherUI:
 
@@ -252,17 +269,8 @@ class CipherUI:
 ###################################################################
 
 
-# grid = Grid()
-# grid.set_lenght()
-# truc = grid.grid_fill()
-# machin = grid.adapt_sentence()
-# print("grif fill", truc, "\n", "adapte", machin)
-
-# grid.mask_fill()
-# grid.set_mask()
-# grid.get_text_mask()
-# grille = grid.set_letter_in_grid()
-
+grid = Grid()
+grid.cipher()
 
 # essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeqcnauupinetsyacilfonseeitdeoabudpsshlkyrppelcuivieailoyewlshysybacwdcmeujcixmysaeculmnfwsiasuanlvatseedaakniortptwarbxlioordsuztycewulwsioelldgekdeelnbjtiojloeqyctwhtahvvetswoxoxrlheda")
 # essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeucnauuxinatsyacinionseuitdeaajurpsssluynyppelccivieailfzewlshhsybacywcseugcismqsaesulmtfnxqasuanlsatseedazkniortptwqrclligofdsuwtycewxensioelldgekgpewnbjtrojxoezyctwhtahnwetswowoprlhedt")
