@@ -152,15 +152,17 @@ class Grid:
     def set_letter_in_grid(self):
         sentence = list(self._sentence)
         print(sentence)
+        centerGtid = self.get_grid_lenght() // 2
 
         #mask_copy = copy.deepcopy(self.get_mask())
         for _ in range(4):
             for i in range(len(self._grid)):
                 for j in range(len(self._grid)):
+                    if i == centerGtid and j == centerGtid:
+                        self._grid[i][j] = chr(rand.randint(ord("a"), ord("z")))
                     if self.get_mask()[i][j] == 1 and sentence:
                         self._grid[i][j] = sentence.pop(0)
                         #mask_copy[i][j] = 2  # Set letter
-
 
             self.mask_rotation()
 
@@ -172,10 +174,7 @@ class Grid:
         for i in range(self.get_grid_lenght()):
             chunk = []
             for j in range(self.get_grid_lenght()):
-                if setenceToDecipher:
-                    chunk.append(setenceToDecipher.pop(0))
-                else:
-                    chunk.append('')
+                chunk.append(setenceToDecipher.pop(0))
             decipherGrid.append(chunk)
 
         self._mask = self.get_text_mask()
@@ -272,11 +271,11 @@ class CipherUI:
 grid = Grid()
 grid.cipher()
 
-essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeqcnauupinetsyacilfonseeitdeoabudpsshlkyr0pelcuivieailoyewlshysybacwdcmeujcixmysaeculmnfwsiasuanlvatseedaakniortptwarbxlioordsuztycewulwsioelldgekdeelnbjtiojloeqyctwhtahvvetswoxoxrlhedap")
-print("déchifré " , *essaie)
+essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeqcnauupinetsyacilfonseeitdeoabudpsshlktyrppelcuivieailoyewlshysybacwdcmeujcixmysaeculmnfwsiasuanlvatseedaakniortptwarbxlioordsuztycewulwsioelldgekdeelnbjtiojloeqyctwhtahvvetswoxoxrlheda")
+print("déchifré Sujet" , *essaie)
 
 essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreebcnauubinqtsyaciqhonseoitdemaouapsshlpydfppelciivieailexewlshhsybaccpcdeuncijmisaegulmbfkafasuanleatseedajkniortptwkrnhlipoydsudtncewpjusioelldgeiideknbjttojsoelyctwhtahsoetswonocrlhedd")
-print("déchifré " , *essaie)
+print("déchifré Benj" , *essaie)
 # grid.get_json_mask()
 
 # grid_ui = CipherUI()
