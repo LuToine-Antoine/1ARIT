@@ -16,11 +16,11 @@ class Grid:
         self._grid = []
         self._mask = []
 
-    def set_lenght(self, len_word):
+    def set_lenght(self):
         """
         Set the grid lenght
         """
-        self._grid_lenght = len_word
+        self._grid_lenght = int(input("Enter grid lenght: "))
 
     def get_grid_lenght(self):
         """
@@ -189,8 +189,8 @@ class Grid:
             self.mask_rotation()
         return deciphered
 
-    def cipher(self, len_cypher):
-        self.set_lenght(len(len_cypher))
+    def cipher(self):
+        self.set_lenght()
         self.grid_fill()
         self.adapt_sentence()
         self.mask_fill()
@@ -250,10 +250,10 @@ class CipherUI:
         self._canvas.pack()
         self._root.mainloop()
 
-    def cypher_button(self):
-        text_to_cypher = self._input_text_to_cipher
-        cyphered_text = self._grid.cipher(text_to_cypher)
-        self._text_to_cipher.insert(tk.END, cyphered_text)
+    # def cypher_button(self):
+    #     text_to_cypher = self._input_text_to_cipher
+    #     cyphered_text = self._grid.cipher(text_to_cypher)
+    #     self._text_to_cipher.insert(tk.END, cyphered_text)
 
     # def draw_grid(self):
     #     grid_len = self._grid.get_grid_lenght()
@@ -269,12 +269,12 @@ class CipherUI:
 ###################################################################
 
 
-#grid = Grid()
-#grid.cipher()
+grid = Grid()
+grid.cipher()
 
 # essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeqcnauupinetsyacilfonseeitdeoabudpsshlkyrppelcuivieailoyewlshysybacwdcmeujcixmysaeculmnfwsiasuanlvatseedaakniortptwarbxlioordsuztycewulwsioelldgekdeelnbjtiojloeqyctwhtahvvetswoxoxrlheda")
 # essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeucnauuxinatsyacinionseuitdeaajurpsssluynyppelccivieailfzewlshhsybacywcseugcismqsaesulmtfnxqasuanlsatseedazkniortptwqrclligofdsuwtycewxensioelldgekgpewnbjtrojxoezyctwhtahnwetswowoprlhedt")
 # print("déchifré " , *essaie)
 # grid.get_json_mask()
 
-grid_ui = CipherUI()
+# grid_ui = CipherUI()
