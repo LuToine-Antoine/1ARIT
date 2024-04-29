@@ -154,7 +154,6 @@ class Grid:
         print(sentence)
         centerGtid = self.get_grid_lenght() // 2
 
-        #mask_copy = copy.deepcopy(self.get_mask())
         for _ in range(4):
             for i in range(len(self._grid)):
                 for j in range(len(self._grid)):
@@ -162,7 +161,6 @@ class Grid:
                         self._grid[i][j] = chr(rand.randint(ord("a"), ord("z")))
                     if self.get_mask()[i][j] == 1 and sentence:
                         self._grid[i][j] = sentence.pop(0)
-                        #mask_copy[i][j] = 2  # Set letter
 
             self.mask_rotation()
 
