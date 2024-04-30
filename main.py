@@ -1,5 +1,4 @@
 import copy
-import json
 import tkinter as tk
 import random as rand
 from tkinter.filedialog import askopenfilename
@@ -138,19 +137,15 @@ class Grid:
         for i in range(n):
             for j in range(n):
                 emptyMask[j][n - 1 - i] = masque[i][j]  # Put coordinate rotation to the "emptyMask" (90°)
-                #emptyMask[n - 1- j][i] = masque[i][j]  # Put coordinate rotation to the "emptyMask" (-90°)
+                # emptyMask[n - 1- j][i] = masque[i][j]  # Put coordinate rotation to the "emptyMask" (-90°)
 
         self._mask = emptyMask  # Set the emptymask to the mask
         return self._mask
 
-    #def save_json(self):
-    #   """
-    #  Save the mask at json
-    # """
-    #save_file = open("mask.txt", "w")
-    #json.dump(self.get_mask(), save_file, indent=6)
-    #save_file.close()
-
+    # def save_mask(self):
+    #  """
+    #   Save the mask
+    #  """
 
     def set_letter_in_grid(self):
         sentence = list(self._sentence)
@@ -203,7 +198,6 @@ class Grid:
                 chunk.append(randomLetterDecipher)
             decipherGrid.append(chunk)
 
-
         for _ in range(4):
             for i in range(len(decipherGrid)):
                 for j in range(len(decipherGrid)):
@@ -233,6 +227,7 @@ class Grid:
         print(cipherGrille)
         return cipherGrille
 
+
 class CipherUI:
 
     def __init__(self):
@@ -242,42 +237,71 @@ class CipherUI:
         self._windows = self._root.geometry("800x900")
         self._canvas = tk.Canvas(self._root, height=600, width=1000)
 
+        # groupes
+        self._group_right_menu = tk.PanedWindow(self._root, orient="vertical", bg="yellow")
+        self._group_clear = tk.PanedWindow(self._root, orient="horizontal", bg="red")
+        self._group_middle_button = tk.PanedWindow(self._root, orient="horizontal", bg="blue")
+        self._group_cyphered = tk.PanedWindow(self._root, orient="horizontal", bg="green")
+
         # Initlialisation des espaces de text qui accueilleront les messages coddés et décoddés.
-        self._text_to_cipher = tk.Text(self._canvas, height=5, width=70, relief="groove")
-        self._text_ciphered = tk.Text(self._canvas, height=5, width=70, relief="groove")
+        self._text_to_cipher = tk.Text(self._group_clear, height=5, width=70, relief="groove")
+        self._text_ciphered = tk.Text(self._group_cyphered, height=5, width=70, relief="groove")
 
         # Récupération des données saisies dans les zones de texte
         self._input_text_ciphered = self._text_ciphered.get("1.0", "end-1c")
 
-        # Initialisation des bouttons de droite
-        self._load_button = tk.Button(self._canvas, height=2, width=20, text="Load")
-        self._random_mask = tk.Button(self._canvas, height=2, width=20, text="Random")
-        self._save_button = tk.Button(self._canvas, height=2, width=20, text="Save")
-        self._create_mask = tk.Checkbutton(self._canvas, height=2, width=20, text="Create")
+        # Bouttons de droite
+        self._load_button = tk.Button(self._group_right_menu, height=2, width=20, text="Load")
+        self._random_mask = tk.Button(self._group_right_menu, height=2, width=20, text="Random")
+        self._save_button = tk.Button(self._group_right_menu, height=2, width=20, text="Save")
+        self._create_mask = tk.Checkbutton(self._group_right_menu, height=2, width=20, text="Create")
 
-        # Initialisation des bouttons centraux
-        self._cypher_button = tk.Button(self._canvas, height=2, width=20, text="Cypher", command=self.cypher_button)
-        self._decypher_button = tk.Button(self._canvas, height=2, width=20, text="Decypher")
-        self._clear_button = tk.Button(self._canvas, height=2, width=20, text="Clear")
-        self._clock = tk.Checkbutton(self._canvas, height=2, width=20, text="Clock")
+        # Bouttons centraux
+        self._cypher_button = tk.Button(self._group_middle_button, height=2, width=20, text="Cypher", command=self.cypher_button)
+        self._decypher_button = tk.Button(self._group_middle_button, height=2, width=20, text="Decypher")
+        self._clear_button = tk.Button(self._group_middle_button, height=2, width=20, text="Clear")
+        self._clock = tk.Checkbutton(self._group_middle_button, height=2, width=20, text="Clock")
 
         # Textes a afficher
-        # self._clear_txt = tk.Label(self._cypher_group, relief="groove", text="truc")
-        # self._clear_txt.pack(side="left")
+        self._clear_txt = tk.Label(self._group_clear, text="Clear")
+        self._cypher_txt = tk.Label(self._group_cyphered, text="Cipher")
 
-        # Affichage des éléments sur la fenêtre
-        self._load_button.pack(side="top")
-        self._random_mask.pack(side="top")
-        self._save_button.pack(side="top")
-        self._create_mask.pack(side="top")
+        # Récupère les cliques de l'utilisateur
+        # self._canvas.bind("<Button-1>", self.boucle_jeu)
 
-        self._text_to_cipher.pack()
+        # Canvas
+        self._canvas.grid(row=0, column=0)
+        self.draw_mask()
+
+        # Menu de droite
+        # self._load_button.pack(side="top")
+        # self._random_mask.pack(side="top")
+        # self._save_button.pack(side="top")
+        # self._create_mask.pack(side="top")
+
+        self._load_button.grid(row=1, column=0)
+        self._random_mask.grid(row=1, column=2)
+        self._save_button.grid(row=1, column=3)
+        self._create_mask.grid(row=1, column=4)
+
+        # Clear text
+        self._clear_txt.pack(side="left")
+        self._text_to_cipher.pack(side="left")
+        self._group_clear.place(x=10, y=400)
+
+        # Menu central
         self._cypher_button.pack(padx=5, pady=5, side="left")
         self._decypher_button.pack(padx=5, pady=5, side="left")
         self._clear_button.pack(padx=5, pady=5, side="left")
         self._clock.pack()
+        self._group_middle_button.place(x=10, y=300)
+
+        # Cyphered text
+        self._cypher_txt.pack(side="left")
         self._text_ciphered.pack()
-        self._canvas.pack()
+        self._group_cyphered.place(x=10, y=600)
+
+        # Lancement général
         self._root.mainloop()
 
     def cypher_button(self):
@@ -287,11 +311,15 @@ class CipherUI:
         self._text_ciphered.delete("1.0", "end")
         self._text_ciphered.insert("1.0", cyphered_text)
 
-    # def draw_mask(self):
-    #     grid_len = self._grid.get_grid_lenght()
-    #     print(grid_len)
-    #     if grid_len % 2 == 0:
-    #         self._canvas.create_rectangle(50, 50, 200, 150, fill="white", outline="black")
+    def draw_mask(self):
+        # Affiche la grille
+        plateau_size = 12  # self._grid.get_grid_lenght()
+        taille_case = 500 // 12  # self._grid.get_grid_lenght() - 1
+        for i in range(plateau_size):
+            for j in range(plateau_size):
+                self._canvas.create_rectangle((i + 1) * taille_case + 2, (j + 1) * taille_case + 2,
+                                              (i + 1) * taille_case + taille_case + 2,
+                                              (j + 1) * taille_case + taille_case + 2, fill="yellow", outline="black")
 
     # def gather_file(self):
 
@@ -300,14 +328,14 @@ class CipherUI:
 
 
 grid = Grid()
-#grid.cipher()
+# grid.cipher()
 
 # grid.set_lenght()
 # essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeqcnauupinetsyacilfonseeitdeoabudpsshlkyrppelcuivieailoyewlshysybacwdcmeujcixmysaeculmnfwsiasuanlvatseedaakniortptwarbxlioordsuztycewulwsioelldgekdeelnbjtiojloeqyctwhtahvvetswoxoxrlheda")
 # print("déchifrement" , *essaie)
 
-#essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreebcnauubinqtsyaciqhonseoitdemaouapsshlpydfppelciivieailexewlshhsybaccpcdeuncijmisaegulmbfkafasuanleatseedajkniortptwkrnhlipoydsudtncewpjusioelldgeiideknbjttojsoelyctwhtahsoetswonocrlhedd")
-#print("déchifré Benj" , *essaie)
+# essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreebcnauubinqtsyaciqhonseoitdemaouapsshlpydfppelciivieailexewlshhsybaccpcdeuncijmisaegulmbfkafasuanleatseedajkniortptwkrnhlipoydsudtncewpjusioelldgeiideknbjttojsoelyctwhtahsoetswonocrlhedd")
+# print("déchifré Benj" , *essaie)
 # grid.get_json_mask()
 
 grid_ui = CipherUI()
