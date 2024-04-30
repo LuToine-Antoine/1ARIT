@@ -174,27 +174,39 @@ class Grid:
         return self._grid
 
     def decipher(self, decipherSentence):
-        setenceToDecipher = list(decipherSentence)
-
-        while len(setenceToDecipher) < self.get_grid_lenght() ** 2:
-            setenceToDecipher.append("a")
-
-        decipherGrid = []
-        for i in range(self.get_grid_lenght()):
-            chunk = []
-            for j in range(self.get_grid_lenght()):
-                chunk.append(setenceToDecipher.pop(0))
-            decipherGrid.append(chunk)
-
         self._mask = self.get_text_mask()
         deciphered = []
+        sentenceToDecipher = list(decipherSentence)
+
+        if len(self._mask) % 2 != 0:
+            middle = len(sentenceToDecipher) // 2 - 2
+            sentenceToDecipher.insert(middle, "a")
+
+        while len(sentenceToDecipher) < self.get_grid_lenght() ** 2:
+            sentenceToDecipher.append("")
+
+        decipherGrid = []
+        for i in range(self.get_grid_lenght()-1):
+            chunk = []
+            for j in range(self.get_grid_lenght()-1):
+                chunk.append(sentenceToDecipher.pop(0))
+            if chunk:
+                last_char = chunk[-1]
+            else:
+                last_char = ""
+
+            randomLetterDecipher = chr(rand.randint(ord("a"), ord("z")))
+            while randomLetterDecipher == last_char:
+                randomLetterDecipher = chr(rand.randint(ord("a"), ord("z")))
+
+            chunk.append(randomLetterDecipher)
+            decipherGrid.append(chunk)
 
         for _ in range(4):
             for i in range(len(decipherGrid)):
                 for j in range(len(decipherGrid)):
                     if i < len(self._mask) and j < len(self._mask[i]) and self._mask[i][j] == 1:
                         deciphered.append(decipherGrid[i][j])
-            print(self._mask)
             self.mask_rotation()
         return deciphered
 
@@ -283,7 +295,7 @@ grid = Grid()
 
 grid.set_lenght()
 essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeqcnauupinetsyacilfonseeitdeoabudpsshlkyrppelcuivieailoyewlshysybacwdcmeujcixmysaeculmnfwsiasuanlvatseedaakniortptwarbxlioordsuztycewulwsioelldgekdeelnbjtiojloeqyctwhtahvvetswoxoxrlheda")
-print("déchifré Sujet" , *essaie)
+print("déchifrement" , *essaie)
 
 #essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreebcnauubinqtsyaciqhonseoitdemaouapsshlpydfppelciivieailexewlshhsybaccpcdeuncijmisaegulmbfkafasuanleatseedajkniortptwkrnhlipoydsudtncewpjusioelldgeiideknbjttojsoelyctwhtahsoetswonocrlhedd")
 #print("déchifré Benj" , *essaie)
