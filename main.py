@@ -186,21 +186,24 @@ class Grid:
             sentenceToDecipher.append("")
 
         decipherGrid = []
-        for i in range(self.get_grid_lenght()-1):
+        taille = len(self._mask)
+
+        for i in range(taille):
             chunk = []
-            for j in range(self.get_grid_lenght()-1):
+            for j in range(taille):
                 chunk.append(sentenceToDecipher.pop(0))
             if chunk:
                 last_char = chunk[-1]
             else:
                 last_char = ""
-
-            randomLetterDecipher = chr(rand.randint(ord("a"), ord("z")))
-            while randomLetterDecipher == last_char:
+            if len(self._mask) % 2 != 0:
                 randomLetterDecipher = chr(rand.randint(ord("a"), ord("z")))
+                while randomLetterDecipher == last_char:
+                    randomLetterDecipher = chr(rand.randint(ord("a"), ord("z")))
 
-            chunk.append(randomLetterDecipher)
+                chunk.append(randomLetterDecipher)
             decipherGrid.append(chunk)
+
 
         for _ in range(4):
             for i in range(len(decipherGrid)):
