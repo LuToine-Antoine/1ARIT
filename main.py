@@ -22,6 +22,10 @@ class Grid:
         """
         self._grid_lenght = int(input("Enter grid lenght: "))
 
+        self._grid = []  # Create empty list
+        if self.get_grid_lenght() % 2 != 0:  # Check if the grid lenght is pair or impair
+            self._grid_lenght += 1
+
     def get_grid_lenght(self):
         """
         Get the grid lenght
@@ -44,14 +48,13 @@ class Grid:
         """
         Create grid with input lenght, chunk by chunk in empty list
         """
-        self._grid = []  # Create empty list
-        for i in range(self.get_grid_lenght()):  # Loop to append 0 in chunk, compared to grid lenght
+        n = self.get_grid_lenght()
+        for i in range(n):  # Loop to append 0 in chunk, compared to grid lenght
             chunk = []
             self._grid.append(chunk)
-            for j in range(self.get_grid_lenght()):
+            for j in range(n):
                 chunk.append(0)
-
-        return self._grid
+        return self._grid, self.get_grid_lenght()
 
     def adapt_sentence(self):
         """
@@ -73,10 +76,6 @@ class Grid:
             if tempsSentence[lenOfSentence] not in "abcdefghijklmnopqrstuvwxyz":
                 tempsSentence = tempsSentence.replace(tempsSentence[lenOfSentence], "")
             lenOfSentence -= 1
-
-        while self.get_grid_lenght() ** 2 > len(tempsSentence):  # Loop to add random letter in sentence, compared to grid lenght
-            lettre = chr(rand.randint(ord("a"), ord("z")))  # Random letter using ASCII
-            tempsSentence += lettre
 
         self._sentence = tempsSentence
         return self._sentence
@@ -103,6 +102,7 @@ class Grid:
             for char in line:
                 row.append(int(char))
             saveMask.append(row)
+        myMask.close()
         return saveMask
 
     def set_mask(self):
@@ -110,9 +110,12 @@ class Grid:
         Set the mask (0 and 1)
         """
         model = self.get_text_mask()
-        for i in range(len(model)):
-            for j in range(len(model)):
-                self._mask[i][j] = model[i][j]
+        print("grille", (self.get_grid_lenght()))
+        for i in range(self.get_grid_lenght()):
+            for j in range(self.get_grid_lenght()):
+                if i < len(model) and j < len(model):
+                    self._mask[i][j] = model[i][j]
+        print("mask", len(self._mask))
 
     def get_mask(self):
         """
@@ -149,25 +152,33 @@ class Grid:
     #json.dump(self.get_mask(), save_file, indent=6)
     #save_file.close()
 
+
     def set_letter_in_grid(self):
         sentence = list(self._sentence)
-        print(sentence)
-        centerGtid = self.get_grid_lenght() // 2
-
-        for _ in range(4):
+        tour = 0
+        mask_copy = copy.deepcopy(self.get_mask())
+        while tour < 4 and sentence:
             for i in range(len(self._grid)):
-                for j in range(len(self._grid)):
-                    if i == centerGtid and j == centerGtid:
-                        self._grid[i][j] = chr(rand.randint(ord("a"), ord("z")))
+                for j in range(len(self._grid[i])):
                     if self.get_mask()[i][j] == 1 and sentence:
                         self._grid[i][j] = sentence.pop(0)
+                        mask_copy[i][j] = 2  # Set letter
+
+                    if self.get_mask()[i][j] == 0 and mask_copy[i][j] == 0:
+                        lettre = chr(rand.randint(ord("a"), ord("z")))  # Random letter using ASCII
+                        self._grid[i][j] = lettre
 
             self.mask_rotation()
+            tour += 1
 
         return self._grid
 
     def decipher(self, decipherSentence):
         setenceToDecipher = list(decipherSentence)
+
+        while len(setenceToDecipher) < self.get_grid_lenght() ** 2:
+            setenceToDecipher.append("a")
+
         decipherGrid = []
         for i in range(self.get_grid_lenght()):
             chunk = []
@@ -181,8 +192,9 @@ class Grid:
         for _ in range(4):
             for i in range(len(decipherGrid)):
                 for j in range(len(decipherGrid)):
-                    if self._mask[i][j] == 1:
+                    if i < len(self._mask) and j < len(self._mask[i]) and self._mask[i][j] == 1:
                         deciphered.append(decipherGrid[i][j])
+            print(self._mask)
             self.mask_rotation()
         return deciphered
 
@@ -194,7 +206,7 @@ class Grid:
         self.set_mask()
         self.get_text_mask()
         grille = self.set_letter_in_grid()
-
+        print(self._grid)
         cipherGrille = ''
 
         for row in grille:
@@ -267,13 +279,14 @@ class CipherUI:
 
 
 grid = Grid()
-grid.cipher()
+#grid.cipher()
 
-essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeqcnauupinetsyacilfonseeitdeoabudpsshlktyrppelcuivieailoyewlshysybacwdcmeujcixmysaeculmnfwsiasuanlvatseedaakniortptwarbxlioordsuztycewulwsioelldgekdeelnbjtiojloeqyctwhtahvvetswoxoxrlheda")
+grid.set_lenght()
+essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreeqcnauupinetsyacilfonseeitdeoabudpsshlkyrppelcuivieailoyewlshysybacwdcmeujcixmysaeculmnfwsiasuanlvatseedaakniortptwarbxlioordsuztycewulwsioelldgekdeelnbjtiojloeqyctwhtahvvetswoxoxrlheda")
 print("déchifré Sujet" , *essaie)
 
-essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreebcnauubinqtsyaciqhonseoitdemaouapsshlpydfppelciivieailexewlshhsybaccpcdeuncijmisaegulmbfkafasuanleatseedajkniortptwkrnhlipoydsudtncewpjusioelldgeiideknbjttojsoelyctwhtahsoetswonocrlhedd")
-print("déchifré Benj" , *essaie)
+#essaie = grid.decipher("bfcobeeacduomtauypeutasesarenpirpdrtoreqogrgrawaiuirmllemsdiosiknmiltlmgbeietrwashotesunbancardintgobreebcnauubinqtsyaciqhonseoitdemaouapsshlpydfppelciivieailexewlshhsybaccpcdeuncijmisaegulmbfkafasuanleatseedajkniortptwkrnhlipoydsudtncewpjusioelldgeiideknbjttojsoelyctwhtahsoetswonocrlhedd")
+#print("déchifré Benj" , *essaie)
 # grid.get_json_mask()
 
 # grid_ui = CipherUI()
