@@ -88,11 +88,11 @@ class Grid:
 
         return self._mask
 
-    def get_text_mask(self):
+    def get_text_mask(self, mask):
         """
         Get the mask from txt file
         """
-        myMask = open("mask.txt", "r")
+        myMask = mask
         saveMask = []
         for line in myMask:
             line = line.strip()  # Remove line break
@@ -100,7 +100,7 @@ class Grid:
             for char in line:
                 row.append(int(char))
             saveMask.append(row)
-        myMask.close()
+        print(saveMask)
         return saveMask
 
     def set_mask(self):
@@ -245,7 +245,7 @@ class CipherUI:
         # self._input_text_ciphered = self._text_ciphered.get("1.0", "end-1c")
 
         # Bouttons de droite
-        self._load_button = tk.Button(self._root, height=1, width=10, text="Load")
+        self._load_button = tk.Button(self._root, height=1, width=10, text="Load", command=self.get_mask_file)
         self._random_mask = tk.Button(self._root, height=1, width=10, text="Random")
         self._save_button = tk.Button(self._root, height=1, width=10, text="Save")
         self._create_mask = tk.Checkbutton(self._root, height=1, width=10, text="Create")
@@ -305,8 +305,11 @@ class CipherUI:
                                               (i + 1) * taille_case + taille_case + 2,
                                               (j + 1) * taille_case + taille_case + 2, fill="yellow", outline="black")
 
-    # def gather_file(self):
-
+    def get_mask_file(self):
+        filename = askopenfilename(title="Sélectionnez votre mask", filetypes=[('txt files', '.txt'), ('all files', '.*')])
+        fichier = open(filename, "r")
+        self._grid.get_text_mask(fichier.read())
+        fichier.close()
 
 ###################################################################
 
