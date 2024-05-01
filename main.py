@@ -237,12 +237,6 @@ class CipherUI:
         self._windows = self._root.geometry("800x900")
         self._canvas = tk.Canvas(self._root, height=600, width=1000)
 
-        # Configuration grid
-        self._root.rowconfigure(0, weight=10)
-        self._root.rowconfigure(1, weight=1)
-        self._root.columnconfigure(0, weight=1)
-        self._root.columnconfigure(1, weight=1)
-
         # Initlialisation des espaces de text qui accueilleront les messages coddés et décoddés.
         self._text_to_cipher = tk.Text(self._root, height=5, width=70, relief="groove")
         self._text_ciphered = tk.Text(self._root, height=5, width=70, relief="groove")
@@ -262,36 +256,34 @@ class CipherUI:
         self._clear_button = tk.Button(self._root, height=2, width=20, text="Clear")
         self._clock = tk.Checkbutton(self._root, height=2, width=20, text="Clock")
 
-        # Textes a afficher
-        self._clear_txt = tk.Label(self._root, text="Clear")
-        self._cypher_txt = tk.Label(self._root, text="Cipher")
-
         # Récupère les cliques de l'utilisateur
         # self._canvas.bind("<Button-1>", self.boucle_jeu)
 
         # Canvas
-        self._canvas.grid(row=0, column=0, rowspan=5, columnspan=5, sticky="nw")
+        self._canvas.grid(row=0, column=0, sticky="nw", columnspan=6, rowspan=6)
         self.draw_mask()
 
         # Menu de droite
-        self._load_button.grid(row=1, column=6, sticky="n")
-        self._random_mask.grid(row=2, column=6, sticky="n")
-        self._save_button.grid(row=3, column=6, sticky="n")
-        self._create_mask.grid(row=4, column=6, sticky="n")
+        self._load_button.grid(row=1, column=2, sticky="nw")
+        self._random_mask.grid(row=1, column=2, sticky="w")
+        self._save_button.grid(row=1, column=2, sticky="sw")
+        self._create_mask.grid(row=2, column=2, sticky="nw")
 
         # Clear text
-        self._clear_txt.grid(row=15, column=1)
-        self._text_to_cipher.grid(row=15, column=2, sticky="w")
+        self._clear_txt = tk.Label(self._root, text="Clear")
+        self._clear_txt.grid(row=6, column=0, sticky="w")
+        self._text_to_cipher.grid(row=6, column=1, sticky="w")
 
         # Menu central
-        self._cypher_button.grid(row=16, column=1)
-        self._decypher_button.grid(row=16, column=2)
-        self._clear_button.grid(row=16, column=3)
-        self._clock.grid(row=16, column=4)
+        self._cypher_button.grid(row=7, column=0, sticky="w")
+        self._decypher_button.grid(row=7, column=1, sticky="we")
+        self._clear_button.grid(row=7, column=2, sticky="se")
+        self._clock.grid(row=7, column=3)
 
         # Cyphered text
-        self._cypher_txt.grid(row=17, column=1)
-        self._text_ciphered.grid(row=17, column=2, sticky="w")
+        self._cypher_txt = tk.Label(self._root, text="Cipher")
+        self._cypher_txt.grid(row=8, column=0, sticky="w")
+        self._text_ciphered.grid(row=8, column=1, sticky="w")
 
         # Lancement général
         self._root.mainloop()
