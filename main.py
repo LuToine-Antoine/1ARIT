@@ -237,69 +237,61 @@ class CipherUI:
         self._windows = self._root.geometry("800x900")
         self._canvas = tk.Canvas(self._root, height=600, width=1000)
 
-        # groupes
-        self._group_right_menu = tk.PanedWindow(self._root, orient="vertical", bg="yellow")
-        self._group_clear = tk.PanedWindow(self._root, orient="horizontal", bg="red")
-        self._group_middle_button = tk.PanedWindow(self._root, orient="horizontal", bg="blue")
-        self._group_cyphered = tk.PanedWindow(self._root, orient="horizontal", bg="green")
+        # Configuration grid
+        self._root.rowconfigure(0, weight=10)
+        self._root.rowconfigure(1, weight=1)
+        self._root.columnconfigure(0, weight=1)
+        self._root.columnconfigure(1, weight=1)
 
         # Initlialisation des espaces de text qui accueilleront les messages coddés et décoddés.
-        self._text_to_cipher = tk.Text(self._group_clear, height=5, width=70, relief="groove")
-        self._text_ciphered = tk.Text(self._group_cyphered, height=5, width=70, relief="groove")
+        self._text_to_cipher = tk.Text(self._root, height=5, width=70, relief="groove")
+        self._text_ciphered = tk.Text(self._root, height=5, width=70, relief="groove")
 
         # Récupération des données saisies dans les zones de texte
-        self._input_text_ciphered = self._text_ciphered.get("1.0", "end-1c")
+        # self._input_text_ciphered = self._text_ciphered.get("1.0", "end-1c")
 
         # Bouttons de droite
-        self._load_button = tk.Button(self._group_right_menu, height=2, width=20, text="Load")
-        self._random_mask = tk.Button(self._group_right_menu, height=2, width=20, text="Random")
-        self._save_button = tk.Button(self._group_right_menu, height=2, width=20, text="Save")
-        self._create_mask = tk.Checkbutton(self._group_right_menu, height=2, width=20, text="Create")
+        self._load_button = tk.Button(self._root, height=1, width=10, text="Load")
+        self._random_mask = tk.Button(self._root, height=1, width=10, text="Random")
+        self._save_button = tk.Button(self._root, height=1, width=10, text="Save")
+        self._create_mask = tk.Checkbutton(self._root, height=1, width=10, text="Create")
 
         # Bouttons centraux
-        self._cypher_button = tk.Button(self._group_middle_button, height=2, width=20, text="Cypher", command=self.cypher_button)
-        self._decypher_button = tk.Button(self._group_middle_button, height=2, width=20, text="Decypher")
-        self._clear_button = tk.Button(self._group_middle_button, height=2, width=20, text="Clear")
-        self._clock = tk.Checkbutton(self._group_middle_button, height=2, width=20, text="Clock")
+        self._cypher_button = tk.Button(self._root, height=2, width=20, text="Cypher", command=self.cypher_button)
+        self._decypher_button = tk.Button(self._root, height=2, width=20, text="Decypher")
+        self._clear_button = tk.Button(self._root, height=2, width=20, text="Clear")
+        self._clock = tk.Checkbutton(self._root, height=2, width=20, text="Clock")
 
         # Textes a afficher
-        self._clear_txt = tk.Label(self._group_clear, text="Clear")
-        self._cypher_txt = tk.Label(self._group_cyphered, text="Cipher")
+        self._clear_txt = tk.Label(self._root, text="Clear")
+        self._cypher_txt = tk.Label(self._root, text="Cipher")
 
         # Récupère les cliques de l'utilisateur
         # self._canvas.bind("<Button-1>", self.boucle_jeu)
 
         # Canvas
-        self._canvas.grid(row=0, column=0)
+        self._canvas.grid(row=0, column=0, rowspan=5, columnspan=5, sticky="nw")
         self.draw_mask()
 
         # Menu de droite
-        # self._load_button.pack(side="top")
-        # self._random_mask.pack(side="top")
-        # self._save_button.pack(side="top")
-        # self._create_mask.pack(side="top")
-
-        self._load_button.grid(row=1, column=0)
-        self._random_mask.grid(row=1, column=2)
-        self._save_button.grid(row=1, column=3)
-        self._create_mask.grid(row=1, column=4)
+        self._load_button.grid(row=1, column=6, sticky="n")
+        self._random_mask.grid(row=2, column=6, sticky="n")
+        self._save_button.grid(row=3, column=6, sticky="n")
+        self._create_mask.grid(row=4, column=6, sticky="n")
 
         # Clear text
-        self._clear_txt.pack(side="left")
-        self._text_to_cipher.pack(side="left")
-        self._group_clear.place(x=10, y=400)
+        self._clear_txt.grid(row=15, column=1)
+        self._text_to_cipher.grid(row=15, column=2, sticky="w")
 
         # Menu central
-        self._cypher_button.pack(padx=5, pady=5, side="left")
-        self._decypher_button.pack(padx=5, pady=5, side="left")
-        self._clear_button.pack(padx=5, pady=5, side="left")
-        self._clock.pack()
-        self._group_middle_button.place(x=10, y=300)
+        self._cypher_button.grid(row=16, column=1)
+        self._decypher_button.grid(row=16, column=2)
+        self._clear_button.grid(row=16, column=3)
+        self._clock.grid(row=16, column=4)
 
         # Cyphered text
-        self._cypher_txt.pack(side="left")
-        self._text_ciphered.pack()
-        self._group_cyphered.place(x=10, y=600)
+        self._cypher_txt.grid(row=17, column=1)
+        self._text_ciphered.grid(row=17, column=2, sticky="w")
 
         # Lancement général
         self._root.mainloop()
