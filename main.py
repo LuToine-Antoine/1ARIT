@@ -139,14 +139,6 @@ class Grid:
         self._mask = emptyMask  # Set the emptymask to the mask
         return self._mask
 
-    def save_mask(self):
-        """
-        Save the mask in a txt
-        """
-        mask_file = open("custom_mask.txt", "w")
-        mask_file.write(str(self.get_mask()))
-        mask_file.close()
-
     def set_letter_in_grid(self):
         sentence = list(self._sentence)
         tour = 0
@@ -206,10 +198,25 @@ class Grid:
             self.mask_rotation()
         return deciphered
 
+    #def cipher(self):
+    #    self.set_lenght()
+    #    self.grid_fill()
+    #    self.adapt_sentence()
+    #    self.mask_fill()
+    #    self.set_mask()
+    #    self.get_text_mask()
+    #    grille = self.set_letter_in_grid()
+    #    print(self._grid)
+    #    cipherGrille = ''
+    #    for row in grille:
+    #        for letter in row:
+    #            cipherGrille += str(letter)
+    #    print(cipherGrille)
+    #    return
+
+
     def cipher(self, sentence):
-        print("la phrase est", sentence)
         len_grid = len(sentence)
-        print("la len de la phrase", len_grid)
         self.set_lenght(len_grid)
         self.grid_fill()
         self.set_sentence(sentence)
@@ -246,7 +253,7 @@ class CipherUI:
         # Bouttons de droite
         self._load_button = tk.Button(self._root, height=1, width=10, text="Load", command=self.get_mask_file)
         self._random_mask = tk.Button(self._root, height=1, width=10, text="Random")
-        self._save_button = tk.Button(self._root, height=1, width=10, text="Save", command=self.save_button())
+        self._save_button = tk.Button(self._root, height=1, width=10, text="Save", command=self.save_button)
         self._create_mask = tk.Checkbutton(self._root, height=1, width=10, text="Create")
 
         # Bouttons centraux
@@ -256,7 +263,7 @@ class CipherUI:
         self._clock = tk.Checkbutton(self._root, height=2, width=20, text="Clock")
 
         # Récupère les cliques de l'utilisateur
-        # self._canvas.bind("<Button-1>", self.boucle_jeu)
+        self._canvas.bind("<Button-1>", self.set_mask_by_user)
 
         # Canvas
         self._canvas.grid(row=0, column=0, sticky="nw", columnspan=6, rowspan=6)
@@ -304,7 +311,22 @@ class CipherUI:
         self._text_to_cipher.delete("1.0", "end")
 
     def save_button(self):
-        self._grid.save_mask()
+        """
+        Save the mask in a txt
+        """
+        mask_file = open("custom_mask.txt", "w")
+        print("mask", self._grid.get_mask())
+        mask_to_save = self._grid.get_mask()
+        print("mask_to_save", mask_to_save)
+        line = ""
+
+        for i in range(len(mask_to_save)):
+            for j in range(len(mask_to_save)):
+                line += str(mask_to_save[i][j])
+            line += "\n"
+            mask_file.write(line)
+            print("line", line)
+        mask_file.close()
         print("mask saved")
 
     def draw_mask(self):
@@ -351,8 +373,12 @@ class CipherUI:
         self.draw_mask()
 
     def set_mask_by_user(self, event):
-
+        self._grid.set_lenght(len(self._text_to_cipher.get("1.0", "end-1c")))
+        self._grid.mask_fill()
         click = (((event.x - 50) // self._grid.get_grid_lenght()), ((event.y - 50) // self._grid.get_grid_lenght()))
+        print(click)
+        #self._grid.set_mask()
+
 
 
 ###################################################################
