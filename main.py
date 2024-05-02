@@ -8,7 +8,7 @@ class Grid:
 
     def __init__(self):
         """
-        Initialize grid (length, sentence to cipher and grid)
+        Initialize grid class
         """
         self._grid_lenght = None
         self._sentence = None
@@ -33,13 +33,13 @@ class Grid:
 
     def set_sentence(self, sentence):
         """
-        Set the sentence
+        Set the sentence to cipher
         """
         self._sentence = sentence
 
     def get_sentence(self):
         """
-        Get the sentence
+        Get the sentence to cipher
         """
         return self._sentence
 
@@ -79,6 +79,9 @@ class Grid:
         return self._sentence
 
     def mask_fill(self):
+        """
+        Fill the mask with 0
+        """
         self._mask = []  # Create empty list
         for i in range(self.get_grid_lenght()):  # Loop to append 0 in chunk, compared to grid lenght
             chunkMask = []
@@ -88,23 +91,9 @@ class Grid:
 
         return self._mask
 
-    def get_text_mask(self, mask):
-        """
-        Get the mask from txt file
-        """
-        myMask = mask
-        saveMask = []
-        for line in myMask:
-            line = line.strip()  # Remove line break
-            row = []
-            for char in line:
-                row.append(int(char))
-            saveMask.append(row)
-        self._mask = saveMask
-
     def set_mask_with_file(self):
         """
-        Set the mask (0 and 1)
+        Set the mask (0 and 1) from txt file
         """
         model = self.get_mask()
         print("grille", (self.get_grid_lenght()))
@@ -115,6 +104,9 @@ class Grid:
         print("mask", len(self._mask))
 
     def set_mask(self, x, y):
+        """
+        Set the mask (0 and 1) at the position x and y
+        """
         if self._mask[x][y] == 1:
             self._mask[x][y] = 0
         elif self._mask[x][y] == 0:
@@ -147,10 +139,13 @@ class Grid:
         self._mask = emptyMask  # Set the emptymask to the mask
         return self._mask
 
-    # def save_mask(self):
-    #  """
-    #   Save the mask
-    #  """
+    def save_mask(self):
+        """
+        Save the mask in a txt
+        """
+        mask_file = open("custom_mask.txt", "w")
+        mask_file.write(str(self.get_mask()))
+        mask_file.close()
 
     def set_letter_in_grid(self):
         sentence = list(self._sentence)
@@ -173,7 +168,7 @@ class Grid:
         return self._grid
 
     def decipher(self, decipherSentence):
-        self._mask = self.get_text_mask()
+        # self._mask = self.get_text_mask()
         deciphered = []
         sentenceToDecipher = list(decipherSentence)
 
@@ -220,7 +215,6 @@ class Grid:
         self.set_sentence(sentence)
         self.adapt_sentence()
         self.mask_fill()
-        # self.set_mask_with_file()
         self.get_mask()
         grille = self.set_letter_in_grid()
         print(self._grid)
@@ -252,12 +246,12 @@ class CipherUI:
         # Bouttons de droite
         self._load_button = tk.Button(self._root, height=1, width=10, text="Load", command=self.get_mask_file)
         self._random_mask = tk.Button(self._root, height=1, width=10, text="Random")
-        self._save_button = tk.Button(self._root, height=1, width=10, text="Save")
+        self._save_button = tk.Button(self._root, height=1, width=10, text="Save", command=self.save_button())
         self._create_mask = tk.Checkbutton(self._root, height=1, width=10, text="Create")
 
         # Bouttons centraux
-        self._cypher_button = tk.Button(self._root, height=2, width=20, text="Cypher", command=self.cypher_button)
-        self._decypher_button = tk.Button(self._root, height=2, width=20, text="Decypher")
+        self._cypher_button = tk.Button(self._root, height=2, width=20, text="Cypher", command=self.cipher_button)
+        self._decypher_button = tk.Button(self._root, height=2, width=20, text="Decypher", command=self.decipher_button)
         self._clear_button = tk.Button(self._root, height=2, width=20, text="Clear", command=self.clear_button)
         self._clock = tk.Checkbutton(self._root, height=2, width=20, text="Clock")
 
@@ -292,50 +286,74 @@ class CipherUI:
         # Lancement général
         self._root.mainloop()
 
-    def cypher_button(self):
-        text_to_cypher = self._text_to_cipher.get("1.0", "end-1c")
-        print(text_to_cypher)
-        cyphered_text = self._grid.cipher(text_to_cypher)
+    def cipher_button(self):
+        text_to_cipher = self._text_to_cipher.get("1.0", "end-1c")
+        ciphered_text = self._grid.cipher(text_to_cipher)
         self._text_ciphered.delete("1.0", "end")
-        self._text_ciphered.insert("1.0", cyphered_text)
-        self._canvas.delete("all")
-        self.draw_mask()
+        self._text_ciphered.insert("1.0", ciphered_text)
+
+    def decipher_button(self):
+        text_to_decipher = self._text_ciphered.get("1.0", "end-1c")
+        self._grid.set_lenght(len(text_to_decipher))
+        deciphered_text = self._grid.decipher(text_to_decipher)
+        self._text_to_cipher.delete("1.0", "end")
+        self._text_to_cipher.insert("1.0", str(deciphered_text))
 
     def clear_button(self):
         self._text_ciphered.delete("1.0", "end")
         self._text_to_cipher.delete("1.0", "end")
 
+    def save_button(self):
+        self._grid.save_mask()
+        print("mask saved")
+
     def draw_mask(self):
         # Affiche la grille
-        case_number = 0
         mask_len = len(self._grid.get_mask())
-        taille_case = 500 // mask_len - 1
-        if mask_len % 2 == 0:
-            case_number = mask_len**2 // 4
-        elif mask_len % 2 == 1:
-            case_number = (mask_len**2-1) // 4
 
-        for i in range(case_number):
-            for j in range(case_number):
-                if self._grid.get_mask()[i][j] == 1:
+        print("mask : \n", self._grid.get_mask())
+        print("longueur mask", mask_len)
+        taille_case = 500 // mask_len
+        if mask_len % 2 == 0:
+            case_number = mask_len ** 2 // 4
+        elif mask_len % 2 == 1:
+            case_number = (mask_len ** 2 - 1) // 4
+
+        for i in range(mask_len):
+            for j in range(mask_len):
+
+                if self._grid.get_mask()[j][i] == 0:
                     self._canvas.create_rectangle((i + 1) * taille_case + 2, (j + 1) * taille_case + 2,
                                                   (i + 1) * taille_case + taille_case + 2,
-                                                  (j + 1) * taille_case + taille_case + 2, fill="yellow", outline="black")
-                elif self._grid.get_mask()[i][j] == 0:
+                                                  (j + 1) * taille_case + taille_case + 2, fill="black",
+                                                  outline="blue")
+                elif self._grid.get_mask()[j][i] == 1:
                     self._canvas.create_rectangle((i + 1) * taille_case + 2, (j + 1) * taille_case + 2,
                                                   (i + 1) * taille_case + taille_case + 2,
-                                                  (j + 1) * taille_case + taille_case + 2, fill="green",
-                                                  outline="black")
+                                                  (j + 1) * taille_case + taille_case + 2, fill="white",
+                                                  outline="blue")
+
 
     def get_mask_file(self):
-        filename = askopenfilename(title="Sélectionnez votre mask", filetypes=[('txt files', '.txt'), ('all files', '.*')])
-        fichier = open(filename, "r")
-        self._grid.get_text_mask(fichier.read())
-        fichier.close()
+        filename = askopenfilename(title="Sélectionnez votre mask",
+                                   filetypes=[('txt files', '.txt'), ('all files', '.*')])
+        file = open(filename, "r")
+        saveMask = []
+        for line in file:
+            line = line.strip()  # Remove line break
+            row = []
+            for char in line:
+                row.append(int(char))
+            saveMask.append(row)
+        self._grid._mask = saveMask
+        file.close()
+        self._canvas.delete("all")
+        self.draw_mask()
 
     def set_mask_by_user(self, event):
 
         click = (((event.x - 50) // self._grid.get_grid_lenght()), ((event.y - 50) // self._grid.get_grid_lenght()))
+
 
 ###################################################################
 
