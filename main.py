@@ -315,17 +315,13 @@ class CipherUI:
         Save the mask in a txt
         """
         mask_file = open("custom_mask.txt", "w")
-        print("mask", self._grid.get_mask())
         mask_to_save = self._grid.get_mask()
-        print("mask_to_save", mask_to_save)
         line = ""
-
         for i in range(len(mask_to_save)):
             for j in range(len(mask_to_save)):
                 line += str(mask_to_save[i][j])
             line += "\n"
-            mask_file.write(line)
-            print("line", line)
+        mask_file.write(line)
         mask_file.close()
         print("mask saved")
 
