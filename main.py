@@ -44,6 +44,18 @@ class Grid:
                 chunk.append(0)
         return self._grid
 
+    def set_sentence(self, sentence):
+        """
+        Set the sentence
+        """
+        self._sentence = sentence
+
+    def get_sentence(self):
+        """
+        Get the sentence
+        """
+        return self._sentence
+
     def adapt_sentence(self):
         """
         Adapt sentence with lower, no special caracter and no sapce
@@ -192,22 +204,6 @@ class Grid:
                         deciphered.append(decipherGrid[i][j])
             self.mask_rotation()
         return deciphered
-
-    #def cipher(self):
-    #    self.set_lenght()
-    #    self.grid_fill()
-    #    self.adapt_sentence()
-    #    self.mask_fill()
-    #    self.set_mask()
-    #    self.get_text_mask()
-    #    grille = self.set_letter_in_grid()
-    #    print(self._grid)
-    #    cipherGrille = ''
-    #    for row in grille:
-    #        for letter in row:
-    #            cipherGrille += str(letter)
-    #    print(cipherGrille)
-    #    return
 
     def cipher(self, sentence):
         len_grid = len(sentence)
