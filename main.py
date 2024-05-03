@@ -155,10 +155,9 @@ class Grid:
 
         return self._grid
 
-    def decipher(self, decipherSentence):
-        # self._mask = self.get_text_mask()
+    def decipher(self, decipher_sentence):
         deciphered = []
-        sentenceToDecipher = list(decipherSentence)
+        sentenceToDecipher = list(decipher_sentence)
 
         if len(self._mask) % 2 != 0:
             middle = len(sentenceToDecipher) // 2 - 2
