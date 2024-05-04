@@ -32,7 +32,6 @@ class Grid:
         """
         return self._grid_lenght
 
-
     def grid_fill(self):
         """
         Create grid with input lenght, chunk by chunk in empty list
@@ -57,14 +56,14 @@ class Grid:
         """
         return self._sentence
 
-    def adapt_sentence(self, sentenceAdapt):
+    def adapt_sentence(self, sentence_adapt):
         """
         Adapt sentence with lower, no special caracter and no sapce
         """
 
         replaceCaractere = {"e": "éèêë", "a": "àâä", "u": "ùûü", "i": "îï", "o": "ôö",
                             "c": "ç", "": "',;:!?./§$\n"}  # Dictionnary of special letters
-        tempsSentence = sentenceAdapt.lower()  # Set sentence to lower
+        tempsSentence = sentence_adapt.lower()  # Set sentence to lower
         tempsSentence = tempsSentence.replace(" ", "")  # Remove space
 
         for key, value in replaceCaractere.items():  # Loop in oder to replace caractere (dict. values) in sentence with dict. key
@@ -82,9 +81,15 @@ class Grid:
         return self._sentence
 
     def set_mask_lenght(self, mask_len):
+        """
+        set the mask lenght
+        """
         self._mask_lenght = mask_len
 
     def get_mask_lenght(self):
+        """
+        Get the mask lenght
+        """
         return int(self._mask_lenght)
 
     def mask_fill(self, model):
@@ -125,13 +130,6 @@ class Grid:
         elif self._mask[x][y] == 0:
             self._mask[x][y] = 1
 
-   # def set_mask(self, mask):
-   #     print("mask", mask)
-   #     print("mask len", len(mask))
-   #     for i in range(len(mask)):
-   #         for j in range(len(mask)):
-   #             self._mask[i][j] = mask[i][j]
-
     def get_mask(self):
         """
         Get the mask
@@ -160,6 +158,9 @@ class Grid:
         return self._mask
 
     def set_letter_in_grid(self):
+        """
+        Fill the grid with letters
+        """
         sentence = list(self._sentence)
         tour = 0
         mask_copy = copy.deepcopy(self.get_mask())
@@ -180,10 +181,13 @@ class Grid:
         return self._grid
 
     def decipher(self, decipher_sentence):
+        """
+        Decipher the sentence
+        """
         deciphered = []
         self.set_sentence(decipher_sentence)
         tes = self.adapt_sentence(decipher_sentence)
-        print("adapate" , tes)
+        print("adapate", tes)
         sentenceToDecipher = list(decipher_sentence)
 
         print("mask in decypher", self._mask)
@@ -223,6 +227,9 @@ class Grid:
         return deciphered
 
     def cipher(self, sentence):
+        """
+        Cipher the sentence
+        """
         len_grid = len(self._mask)
         self.set_grid_lenght(len_grid)
         print("grid len \n", self.get_grid_lenght())
@@ -263,7 +270,9 @@ class CipherUI:
         self._random_mask = tk.Button(self._root, height=1, width=10, text="Random")
         self._save_button = tk.Button(self._root, height=1, width=10, text="Save", command=self.save_button)
         self._checkbutton_value_create = tk.IntVar()
-        self._create_mask = tk.Checkbutton(self._root, height=1, width=10, text="Create", variable=self._checkbutton_value_create, onvalue=1, offvalue=0, command=self.checkbutton_set_value_create)
+        self._create_mask = tk.Checkbutton(self._root, height=1, width=10, text="Create",
+                                           variable=self._checkbutton_value_create, onvalue=1, offvalue=0,
+                                           command=self.checkbutton_set_value_create)
         self._label_ask_mask_len = tk.Label(self._root, height=1, text="Mask lenght")
         self._ask_mask_len = tk.Spinbox(self._root, from_=1, to=100, width=7, command=self.set_mask_len)
 
@@ -272,7 +281,8 @@ class CipherUI:
         self._decypher_button = tk.Button(self._root, height=2, width=20, text="Decypher", command=self.decipher_button)
         self._clear_button = tk.Button(self._root, height=2, width=20, text="Clear", command=self.clear_button)
         self._checkbutton_value_clock = tk.IntVar()
-        self._clock = tk.Checkbutton(self._root, height=2, width=20, text="Clock", variable=self._checkbutton_value_clock, onvalue=1, offvalue=0) # , command=self.checkbutton_set_value_clock)
+        self._clock = tk.Checkbutton(self._root, height=2, width=20, text="Clock",
+                                     variable=self._checkbutton_value_clock, onvalue=1, offvalue=0)  # , command=self.checkbutton_set_value_clock)
 
         # Canvas
         self._canvas.grid(row=0, column=0, sticky="nw", columnspan=6, rowspan=6)
@@ -308,17 +318,23 @@ class CipherUI:
         self._root.mainloop()
 
     def cipher_button(self):
+        """
+        Cipher the sentence
+        """
         text_to_cipher = self._text_to_cipher.get("1.0", "end-1c")
         adaptated = self._grid.adapt_sentence(text_to_cipher)
         self._grid.set_sentence(adaptated)
         text_to_cipher = adaptated
         print("mask : \n", self._grid.get_mask())
         ciphered_text = self._grid.cipher(text_to_cipher)
-        print("test",ciphered_text)
+        print("test", ciphered_text)
         self._text_ciphered.delete("1.0", "end")
         self._text_ciphered.insert("1.0", ciphered_text)
 
     def decipher_button(self):
+        """
+        Decipher the sentence
+        """
         text_to_decipher = self._text_ciphered.get("1.0", "end-1c")
         adaptated = self._grid.adapt_sentence(text_to_decipher)
         print("test", adaptated)
@@ -335,10 +351,16 @@ class CipherUI:
         self._text_to_cipher.insert("1.0", str(deciphered_text))
 
     def clear_button(self):
+        """
+        Clear the text areas
+        """
         self._text_ciphered.delete("1.0", "end")
         self._text_to_cipher.delete("1.0", "end")
 
     def checkbutton_set_value_create(self):
+        """
+        Check the create checkbutton state
+        """
         self._checkbutton_value_create.get()
         if self._checkbutton_value_create.get() == 1:
             self._canvas.bind("<Button-1>", self.set_mask_by_user)
@@ -366,6 +388,9 @@ class CipherUI:
         print("mask saved")
 
     def set_mask_len(self):
+        """
+        Set the mask lenght with the user input
+        """
         temp_mask = []
         mask_len = self._ask_mask_len.get()
         self._grid.set_mask_lenght(mask_len)
@@ -384,6 +409,9 @@ class CipherUI:
         return self._grid.get_mask()
 
     def get_mask_file(self):
+        """
+        Set the mask thanks to a txt file
+        """
         filename = askopenfilename(title="Sélectionnez votre mask",
                                    filetypes=[('txt files', '.txt'), ('all files', '.*')])
         file = open(filename, "r")
@@ -401,6 +429,9 @@ class CipherUI:
         self.draw_mask()
 
     def set_mask_by_user(self, event):
+        """
+        Change the mask by the user actions
+        """
         self._grid.set_grid_lenght(len(self._text_to_cipher.get("1.0", "end-1c")))
         click = ((event.y // (500//self._grid.get_mask_lenght())-1), (event.x // (500 // self._grid.get_mask_lenght()))-1)
         print(click)
@@ -411,6 +442,9 @@ class CipherUI:
         self.draw_mask()
 
     def draw_mask(self):
+        """
+        Draw the mask grid
+        """
         # Affiche la grille
         mask_len = self._grid.get_mask_lenght()
 
