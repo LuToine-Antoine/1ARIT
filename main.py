@@ -13,6 +13,7 @@ class Grid:
         self._grid_lenght = None
         self._mask_lenght = None
         self._sentence = None
+        self._rotation_mode = 0
         self._grid = []
         self._mask = []
 
@@ -136,10 +137,17 @@ class Grid:
         """
         return self._mask
 
+    def set_rotation(self, rotation):
+        self._rotation_mode = rotation
+
+    def get_rotation(self):
+        return self._rotation_mode
+
     def mask_rotation(self):
         """
         Rotate the mask
         """
+        mode = self.get_rotation()
         masque = self.get_mask()
         n = len(masque)
         emptyMask = []  # Create empty list to append rotating mask and return this mask from the "copy"
@@ -151,8 +159,10 @@ class Grid:
 
         for i in range(n):
             for j in range(n):
-                emptyMask[j][n - 1 - i] = masque[i][j]  # Put coordinate rotation to the "emptyMask" (90°)
-                # emptyMask[n - 1- j][i] = masque[i][j]  # Put coordinate rotation to the "emptyMask" (-90°)
+                if mode == 0:
+                    emptyMask[j][n - 1 - i] = masque[i][j]  # Put coordinate rotation to the "emptyMask" (90°)
+                if mode == 1:
+                    emptyMask[n - 1 - j][i] = masque[i][j]  # Put coordinate rotation to the "emptyMask" (-90°)
 
         self._mask = emptyMask  # Set the emptymask to the mask
         return self._mask
@@ -256,6 +266,7 @@ class CipherUI:
 
     def __init__(self):
         self._grid = Grid()
+        self._under_mask = []
         self._root = tk.Tk()
         self._root.title("Grilles tournantes de Fleissner")
         self._windows = self._root.geometry("800x900")
@@ -282,7 +293,7 @@ class CipherUI:
         self._clear_button = tk.Button(self._root, height=2, width=20, text="Clear", command=self.clear_button)
         self._checkbutton_value_clock = tk.IntVar()
         self._clock = tk.Checkbutton(self._root, height=2, width=20, text="Clock",
-                                     variable=self._checkbutton_value_clock, onvalue=1, offvalue=0)  # , command=self.checkbutton_set_value_clock)
+                                     variable=self._checkbutton_value_clock, onvalue=1, offvalue=0, command=self.checkbutton_set_value_clock)
 
         # Canvas
         self._canvas.grid(row=0, column=0, sticky="nw", columnspan=6, rowspan=6)
@@ -367,10 +378,13 @@ class CipherUI:
         elif self._checkbutton_value_create.get() == 0:
             self._canvas.unbind("<Button-1>")
 
-    # def checkbutton_set_value_clock(self):
-    #     self._checkbutton_value_clock.get()
-    #     if self._checkbutton_value_clock.get() == 1:
-    #     elif self._checkbutton_value_clock.get() == 0:
+    def checkbutton_set_value_clock(self):
+        self._checkbutton_value_clock.get()
+        if self._checkbutton_value_clock.get() == 0:
+            self._grid.set_rotation(0)
+        elif self._checkbutton_value_clock.get() == 1:
+            self._grid.set_rotation(1)
+        print(self._grid.get_rotation())
 
     def save_button(self):
         """
@@ -439,7 +453,18 @@ class CipherUI:
 
         self._grid.set_mask_by_user(click[0], click[1])
         self._canvas.delete("all")
+        self.under_mask()
         self.draw_mask()
+
+    def under_mask(self):
+        self._under_mask = self._grid.get_mask()
+        for rotation in range(3):
+            for i in range(self._grid.get_mask_lenght()):
+                for j in range(self._grid.get_mask_lenght()):
+                    if self._grid.get_mask()[i][j] == 1:
+                        self._grid.mask_rotation()
+                        self._under_mask[i][j] = 2
+        print("under mask \n", self._under_mask)
 
     def draw_mask(self):
         """
@@ -465,6 +490,14 @@ class CipherUI:
                                                   (i + 1) * taille_case + taille_case + 2,
                                                   (j + 1) * taille_case + taille_case + 2, fill="white",
                                                   outline="blue")
+
+        # for i in range(mask_len):
+        #     for j in range(mask_len):
+        #         if self._under_mask[i][j] == 2:
+        #             self._canvas.create_rectangle((i + 1) * taille_case + 2, (j + 1) * taille_case + 2,
+        #                                           (i + 1) * taille_case + taille_case + 2,
+        #                                           (j + 1) * taille_case + taille_case + 2, fill="gray",
+        #                                           outline="blue")
 
 
 grid_ui = CipherUI()
