@@ -85,7 +85,7 @@ class Grid:
         self._mask_lenght = mask_len
 
     def get_mask_lenght(self):
-        return self._mask_lenght
+        return int(self._mask_lenght)
 
     def mask_fill(self, model):
         """
@@ -322,7 +322,7 @@ class CipherUI:
     def decipher_button(self):
         text_to_decipher = self._text_ciphered.get("1.0", "end-1c")
         adaptated = self._grid.adapt_sentence(text_to_decipher)
-        print("test",adaptated)
+        print("test", adaptated)
         self._grid.set_sentence(adaptated)
         print("button", adaptated)
         text_to_decipher = adaptated
@@ -363,9 +363,24 @@ class CipherUI:
         print("mask saved")
 
     def set_mask_len(self):
+        temp_mask = []
+        chunk = []
         mask_len = self._ask_mask_len.get()
         self._grid.set_mask_lenght(mask_len)
         print("mask lenght", self._grid.get_mask_lenght())
+        if self._grid.get_mask_lenght() % 2 == 0:
+            self._grid.set_mask_lenght(self._grid.get_mask_lenght()**2//4)
+        else:
+            self._grid.set_mask_lenght((self._grid.get_mask_lenght()**2-1)//4)
+        for i in range(self._grid.get_mask_lenght()):
+            for j in range(self._grid.get_mask_lenght()):
+                chunk.append(0)
+            temp_mask.append(chunk)
+        self._grid._mask = temp_mask
+        self._canvas.delete("all")
+        self.draw_mask()
+        print("mask : \n", self._grid.get_mask())
+        return self._grid.get_mask()
 
     def get_mask_file(self):
         filename = askopenfilename(title="Sélectionnez votre mask",
@@ -379,7 +394,7 @@ class CipherUI:
                 row.append(int(char))
             saveMask.append(row)
         self._grid._mask = saveMask
-        print("mask in get mask", self._grid.get_mask())
+        self._grid.set_mask_lenght(len(saveMask))
         file.close()
         self._canvas.delete("all")
         self.draw_mask()
@@ -393,15 +408,11 @@ class CipherUI:
 
     def draw_mask(self):
         # Affiche la grille
-        mask_len = len(self._grid.get_mask())
+        mask_len = self._grid.get_mask_lenght()
 
         print("mask : \n", self._grid.get_mask())
         print("longueur mask", mask_len)
         taille_case = 500 // mask_len
-        if mask_len % 2 == 0:
-            case_number = mask_len ** 2 // 4
-        elif mask_len % 2 == 1:
-            case_number = (mask_len ** 2 - 1) // 4
 
         for i in range(mask_len):
             for j in range(mask_len):
