@@ -272,7 +272,7 @@ class CipherUI:
         self._decypher_button = tk.Button(self._root, height=2, width=20, text="Decypher", command=self.decipher_button)
         self._clear_button = tk.Button(self._root, height=2, width=20, text="Clear", command=self.clear_button)
         self._checkbutton_value_clock = tk.IntVar()
-        self._clock = tk.Checkbutton(self._root, height=2, width=20, text="Clock", variable=self._checkbutton_value_clock, onvalue=1, offvalue=0, command=self.checkbutton_set_value_clock)
+        self._clock = tk.Checkbutton(self._root, height=2, width=20, text="Clock", variable=self._checkbutton_value_clock, onvalue=1, offvalue=0) # , command=self.checkbutton_set_value_clock)
 
         # Canvas
         self._canvas.grid(row=0, column=0, sticky="nw", columnspan=6, rowspan=6)
@@ -350,7 +350,6 @@ class CipherUI:
     #     if self._checkbutton_value_clock.get() == 1:
     #     elif self._checkbutton_value_clock.get() == 0:
 
-
     def save_button(self):
         """
         Save the mask in a txt
@@ -368,15 +367,13 @@ class CipherUI:
 
     def set_mask_len(self):
         temp_mask = []
-        chunk = []
         mask_len = self._ask_mask_len.get()
         self._grid.set_mask_lenght(mask_len)
         print("mask lenght", self._grid.get_mask_lenght())
-        if self._grid.get_mask_lenght() % 2 == 0:
-            self._grid.set_mask_lenght(self._grid.get_mask_lenght()**2//4)
-        else:
-            self._grid.set_mask_lenght((self._grid.get_mask_lenght()**2-1)//4)
+        if self._grid.get_mask_lenght() % 2 != 0:
+            self._grid.set_mask_lenght(((self._grid.get_mask_lenght()**2)-1)//4)
         for i in range(self._grid.get_mask_lenght()):
+            chunk = []
             for j in range(self._grid.get_mask_lenght()):
                 chunk.append(0)
             temp_mask.append(chunk)
@@ -405,10 +402,13 @@ class CipherUI:
 
     def set_mask_by_user(self, event):
         self._grid.set_grid_lenght(len(self._text_to_cipher.get("1.0", "end-1c")))
-        self._grid.mask_fill()
-        click = (((event.x - 50) // self._grid.get_grid_lenght()), ((event.y - 50) // self._grid.get_grid_lenght()))
+        click = ((event.y // (500//self._grid.get_mask_lenght())-1), (event.x // (500 // self._grid.get_mask_lenght()))-1)
         print(click)
+        print(click[0], click[1])
+
         self._grid.set_mask_by_user(click[0], click[1])
+        self._canvas.delete("all")
+        self.draw_mask()
 
     def draw_mask(self):
         # Affiche la grille
