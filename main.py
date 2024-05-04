@@ -447,7 +447,7 @@ class CipherUI:
         Change the mask by the user actions
         """
         self._grid.set_grid_lenght(len(self._text_to_cipher.get("1.0", "end-1c")))
-        click = ((event.y // (500//self._grid.get_mask_lenght())-1), (event.x // (500 // self._grid.get_mask_lenght()))-1)
+        click = ((event.x // (500//self._grid.get_mask_lenght())-1), (event.y // (500 // self._grid.get_mask_lenght()))-1)
         print(click)
         print(click[0], click[1])
 
@@ -458,12 +458,12 @@ class CipherUI:
 
     def under_mask(self):
         self._under_mask = self._grid.get_mask()
-        for rotation in range(3):
-            for i in range(self._grid.get_mask_lenght()):
-                for j in range(self._grid.get_mask_lenght()):
-                    if self._grid.get_mask()[i][j] == 1:
-                        self._grid.mask_rotation()
-                        self._under_mask[i][j] = 2
+        for i in range(self._grid.get_mask_lenght()):
+            for j in range(self._grid.get_mask_lenght()):
+                if self._grid.get_mask()[i][j] == 1:
+                    self._under_mask[i][j] = 2
+                self._grid.mask_rotation()
+
         print("under mask \n", self._under_mask)
 
     def draw_mask(self):
