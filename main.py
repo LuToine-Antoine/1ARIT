@@ -480,10 +480,15 @@ class CipherUI:
         for i in range(mask_len):
             for j in range(mask_len):
 
-                if self._grid.get_mask()[j][i] == 0:
+                if self._grid.get_mask()[i][j] == 0:
                     self._canvas.create_rectangle((i + 1) * taille_case + 2, (j + 1) * taille_case + 2,
                                                   (i + 1) * taille_case + taille_case + 2,
                                                   (j + 1) * taille_case + taille_case + 2, fill="black",
+                                                  outline="blue")
+                elif self._under_mask[i][j] == 2:
+                    self._canvas.create_rectangle((i + 1) * taille_case + 2, (j + 1) * taille_case + 2,
+                                                  (i + 1) * taille_case + taille_case + 2,
+                                                  (j + 1) * taille_case + taille_case + 2, fill="gray",
                                                   outline="blue")
                 elif self._grid.get_mask()[j][i] == 1:
                     self._canvas.create_rectangle((i + 1) * taille_case + 2, (j + 1) * taille_case + 2,
@@ -491,13 +496,7 @@ class CipherUI:
                                                   (j + 1) * taille_case + taille_case + 2, fill="white",
                                                   outline="blue")
 
-        # for i in range(mask_len):
-        #     for j in range(mask_len):
-        #         if self._under_mask[i][j] == 2:
-        #             self._canvas.create_rectangle((i + 1) * taille_case + 2, (j + 1) * taille_case + 2,
-        #                                           (i + 1) * taille_case + taille_case + 2,
-        #                                           (j + 1) * taille_case + taille_case + 2, fill="gray",
-        #                                           outline="blue")
+
 
 
 grid_ui = CipherUI()
