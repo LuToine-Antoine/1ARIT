@@ -262,8 +262,8 @@ class CipherUI:
         self._load_button = tk.Button(self._root, height=1, width=10, text="Load", command=self.get_mask_file)
         self._random_mask = tk.Button(self._root, height=1, width=10, text="Random")
         self._save_button = tk.Button(self._root, height=1, width=10, text="Save", command=self.save_button)
-        self._checkbutton_value = tk.IntVar()
-        self._create_mask = tk.Checkbutton(self._root, height=1, width=10, text="Create", variable=self._checkbutton_value, onvalue=1, offvalue=0)
+        self._checkbutton_value_create = tk.IntVar()
+        self._create_mask = tk.Checkbutton(self._root, height=1, width=10, text="Create", variable=self._checkbutton_value_create, onvalue=1, offvalue=0, command=self.checkbutton_set_value_create)
         self._label_ask_mask_len = tk.Label(self._root, height=1, text="Mask lenght")
         self._ask_mask_len = tk.Spinbox(self._root, from_=1, to=100, width=7, command=self.set_mask_len)
 
@@ -271,7 +271,8 @@ class CipherUI:
         self._cypher_button = tk.Button(self._root, height=2, width=20, text="Cypher", command=self.cipher_button)
         self._decypher_button = tk.Button(self._root, height=2, width=20, text="Decypher", command=self.decipher_button)
         self._clear_button = tk.Button(self._root, height=2, width=20, text="Clear", command=self.clear_button)
-        self._clock = tk.Checkbutton(self._root, height=2, width=20, text="Clock")
+        self._checkbutton_value_clock = tk.IntVar()
+        self._clock = tk.Checkbutton(self._root, height=2, width=20, text="Clock", variable=self._checkbutton_value_clock, onvalue=1, offvalue=0, command=self.checkbutton_set_value_clock)
 
         # Canvas
         self._canvas.grid(row=0, column=0, sticky="nw", columnspan=6, rowspan=6)
@@ -301,9 +302,7 @@ class CipherUI:
         self._text_ciphered.grid(row=8, column=1, sticky="w")
 
         # Récupère les cliques de l'utilisateur
-        # print(self._checkbutton_value.get())
-        # if self._checkbutton_value.get() == 1:
-        #     self._canvas.bind("<Button-1>", self.set_mask_by_user)
+        print(self._checkbutton_value_create.get())
 
         # Lancement général
         self._root.mainloop()
@@ -339,13 +338,18 @@ class CipherUI:
         self._text_ciphered.delete("1.0", "end")
         self._text_to_cipher.delete("1.0", "end")
 
-    # def checkbutton_set_value(self):
-    #     if self._checkbutton_value.get() == 0:
-    #         self._checkbutton_value.set(1)
-    #         self._create_mask.select()
-    #     else:
-    #         self._checkbutton_value.set(0)
-    #         self._create_mask.deselect()
+    def checkbutton_set_value_create(self):
+        self._checkbutton_value_create.get()
+        if self._checkbutton_value_create.get() == 1:
+            self._canvas.bind("<Button-1>", self.set_mask_by_user)
+        elif self._checkbutton_value_create.get() == 0:
+            self._canvas.unbind("<Button-1>")
+
+    # def checkbutton_set_value_clock(self):
+    #     self._checkbutton_value_clock.get()
+    #     if self._checkbutton_value_clock.get() == 1:
+    #     elif self._checkbutton_value_clock.get() == 0:
+
 
     def save_button(self):
         """
