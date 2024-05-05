@@ -446,6 +446,7 @@ class CipherUI:
         """
         Change the mask by the user actions
         """
+        self._under_mask = self._grid.get_mask()
         self._grid.set_grid_lenght(len(self._text_to_cipher.get("1.0", "end-1c")))
         click = ((event.x // (500//self._grid.get_mask_lenght())-1), (event.y // (500 // self._grid.get_mask_lenght()))-1)
         print(click)
@@ -453,18 +454,17 @@ class CipherUI:
 
         if self._under_mask[click[0]][click[1]] != 2:
             self._grid.set_mask_by_user(click[0], click[1])
-        else:
-            self.set_mask_len()
         self._canvas.delete("all")
         self.under_mask()
         self.draw_mask()
 
     def under_mask(self):
         self._under_mask = self._grid.get_mask()
-        for i in range(self._grid.get_mask_lenght()):
-            for j in range(self._grid.get_mask_lenght()):
-                if self._grid.get_mask()[i][j] == 1:
-                    self._under_mask[i][j] = 2
+        for rotate in range(4):
+            for i in range(self._grid.get_mask_lenght()):
+                for j in range(self._grid.get_mask_lenght()):
+                    if self._grid.get_mask()[i][j] == 1:
+                        self._under_mask[i][j] = 2
                 self._grid.mask_rotation()
 
         print("under mask \n", self._under_mask)
@@ -493,7 +493,7 @@ class CipherUI:
                                                   (i + 1) * taille_case + taille_case + 2,
                                                   (j + 1) * taille_case + taille_case + 2, fill="gray",
                                                   outline="blue")
-                elif self._grid.get_mask()[j][i] == 1:
+                elif self._grid.get_mask()[i][j] == 1:
                     self._canvas.create_rectangle((i + 1) * taille_case + 2, (j + 1) * taille_case + 2,
                                                   (i + 1) * taille_case + taille_case + 2,
                                                   (j + 1) * taille_case + taille_case + 2, fill="white",
