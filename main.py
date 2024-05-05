@@ -362,6 +362,9 @@ class CipherUI:
             self._canvas.unbind("<Button-1>")
 
     def checkbutton_set_value_clock(self):
+        """
+        Check the clock checkbutton state
+        """
         self._checkbutton_value_clock.get()
         if self._checkbutton_value_clock.get() == 0:
             self._grid.set_rotation(0)
@@ -385,6 +388,9 @@ class CipherUI:
 
     def random(self):
         self._under_mask = []
+        for i in range(len(self._grid.get_mask())):
+            for j in range(len(self._grid.get_mask())):
+                self._grid.get_mask()[i][j] = 0
         if len(self._under_mask) == 0:
             self.set_under_mask()
         under_mask = self.get_under_mask()
@@ -452,20 +458,27 @@ class CipherUI:
         """
         Change the mask by the user actions
         """
-        self._under_mask = self._grid.get_mask()
-        self._grid.set_grid_lenght(len(self._text_to_cipher.get("1.0", "end-1c")))
-        click = ((event.x // (500//self._grid.get_mask_lenght())-1), (event.y // (500 // self._grid.get_mask_lenght()))-1)
+        if not self._under_mask:
+            self._under_mask = self._grid.get_mask()
+        click = ((event.x // (500//self._grid.get_mask_lenght())-1),
+                 (event.y // (500 // self._grid.get_mask_lenght()))-1)
 
-        if self._under_mask[click[0]][click[1]] != 2:
+        print("truc", self._under_mask[click[0]][click[1]])
+
+        if self._under_mask[click[0]][click[1]] == 2:
+            print("coucou")
+
+        elif self._under_mask[click[0]][click[1]] != 2:
+            print(self._under_mask[click[0]][click[1]])
+            print("bonjour")
             self._grid.set_mask_by_user(click[0], click[1])
             self._canvas.delete("all")
-
             self.under_mask()
             self.draw_mask()
-        self.set_under_mask()
+
+            self.set_under_mask()
 
     def set_under_mask(self):
-        print("mask len in under ", self._grid.get_mask_lenght())
         for i in range(self._grid.get_mask_lenght()):
             chunk = []
             for j in range(self._grid.get_mask_lenght()):
@@ -489,9 +502,7 @@ class CipherUI:
                     if self._grid.get_mask()[i][j] == 1:
                         self._under_mask[i][j] = 2
 
-
         self.draw_mask()
-        print("under mask \n", self._under_mask)
 
     def draw_mask(self):
         """
