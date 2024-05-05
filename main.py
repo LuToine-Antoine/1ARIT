@@ -277,8 +277,8 @@ class CipherUI:
         self._ask_mask_len = tk.Spinbox(self._root, from_=1, to=100, width=7, command=self.set_mask_len)
 
         # Bouttons centraux
-        self._cypher_button = tk.Button(self._root, height=2, width=20, text="Cypher", command=self.cipher_button)
-        self._decypher_button = tk.Button(self._root, height=2, width=20, text="Decypher", command=self.decipher_button)
+        self._cypher_button = tk.Button(self._root, height=2, width=20, text="Cipher", command=self.cipher_button)
+        self._decypher_button = tk.Button(self._root, height=2, width=20, text="Decipher", command=self.decipher_button)
         self._clear_button = tk.Button(self._root, height=2, width=20, text="Clear", command=self.clear_button)
         self._checkbutton_value_clock = tk.IntVar()
         self._clock = tk.Checkbutton(self._root, height=2, width=20, text="Clock",
