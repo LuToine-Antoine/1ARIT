@@ -451,7 +451,10 @@ class CipherUI:
         print(click)
         print(click[0], click[1])
 
-        self._grid.set_mask_by_user(click[0], click[1])
+        if self._under_mask[click[0]][click[1]] != 2:
+            self._grid.set_mask_by_user(click[0], click[1])
+        else:
+            self.set_mask_len()
         self._canvas.delete("all")
         self.under_mask()
         self.draw_mask()
@@ -495,8 +498,6 @@ class CipherUI:
                                                   (i + 1) * taille_case + taille_case + 2,
                                                   (j + 1) * taille_case + taille_case + 2, fill="white",
                                                   outline="blue")
-
-
 
 
 grid_ui = CipherUI()
