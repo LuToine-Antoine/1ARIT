@@ -394,22 +394,13 @@ class CipherUI:
         if len(self._under_mask) == 0:
             self.set_under_mask()
         under_mask = self.get_under_mask()
-        print(under_mask)
         len_under_mask = len(under_mask)
-        print(len_under_mask)
         for random in range(rand.randint(0, len_under_mask+10)):
             x = rand.randint(0, len_under_mask-1)
             y = rand.randint(0, len_under_mask-1)
 
-            print("x : ", x, "y : ", y)
-
             if self._under_mask[x][y] != 2:
                 self._grid.set_mask_by_user(x, y)
-                print("bonjour")
-                print(self._under_mask)
-                print("au revoir")
-                print(self._grid.get_mask())
-
                 self.under_mask()
 
         self._canvas.delete("all")
@@ -502,6 +493,7 @@ class CipherUI:
                     if self._grid.get_mask()[i][j] == 1:
                         self._under_mask[i][j] = 2
 
+        print(self._under_mask)
         self.draw_mask()
 
     def draw_mask(self):
