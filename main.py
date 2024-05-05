@@ -391,7 +391,6 @@ class CipherUI:
         print(under_mask)
         len_under_mask = len(under_mask)
         print(len_under_mask)
-
         for random in range(rand.randint(0, len_under_mask+10)):
             x = rand.randint(0, len_under_mask-1)
             y = rand.randint(0, len_under_mask-1)
@@ -459,9 +458,11 @@ class CipherUI:
 
         if self._under_mask[click[0]][click[1]] != 2:
             self._grid.set_mask_by_user(click[0], click[1])
-        self._canvas.delete("all")
-        self.under_mask()
-        self.draw_mask()
+            self._canvas.delete("all")
+
+            self.under_mask()
+            self.draw_mask()
+        self.set_under_mask()
 
     def set_under_mask(self):
         print("mask len in under ", self._grid.get_mask_lenght())
@@ -471,18 +472,25 @@ class CipherUI:
                 chunk.append(0)
             self._under_mask.append(chunk)
 
+        for i in range(self._grid.get_mask_lenght()):
+            for j in range(self._grid.get_mask_lenght()):
+                if self._grid.get_mask()[i][j] == 1:
+                    self._under_mask[i][j] = 2
+
     def get_under_mask(self):
         return self._under_mask
 
     def under_mask(self):
         self._under_mask = self.get_under_mask()
         for rotate in range(4):
+            self._grid.mask_rotation()
             for i in range(self._grid.get_mask_lenght()):
                 for j in range(self._grid.get_mask_lenght()):
                     if self._grid.get_mask()[i][j] == 1:
                         self._under_mask[i][j] = 2
-                self._grid.mask_rotation()
 
+
+        self.draw_mask()
         print("under mask \n", self._under_mask)
 
     def draw_mask(self):
@@ -496,7 +504,6 @@ class CipherUI:
 
         for i in range(mask_len):
             for j in range(mask_len):
-
                 if self._grid.get_mask()[i][j] == 0:
                     self._canvas.create_rectangle((i + 1) * taille_case + 2, (j + 1) * taille_case + 2,
                                                   (i + 1) * taille_case + taille_case + 2,
@@ -507,11 +514,17 @@ class CipherUI:
                                                   (i + 1) * taille_case + taille_case + 2,
                                                   (j + 1) * taille_case + taille_case + 2, fill="white",
                                                   outline="blue")
-                elif self._under_mask[i][j] == 2:
+
+        for i in range(mask_len):
+            for j in range(mask_len):
+                if self._under_mask[i][j] == 2:
                     self._canvas.create_rectangle((i + 1) * taille_case + 2, (j + 1) * taille_case + 2,
                                                   (i + 1) * taille_case + taille_case + 2,
                                                   (j + 1) * taille_case + taille_case + 2, fill="gray",
                                                   outline="blue")
-
-
+                if self._grid.get_mask()[i][j] == 1 :
+                    self._canvas.create_rectangle((i + 1) * taille_case + 2, (j + 1) * taille_case + 2,
+                                              (i + 1) * taille_case + taille_case + 2,
+                                              (j + 1) * taille_case + taille_case + 2, fill="white",
+                                              outline="blue")
 grid_ui = CipherUI()
