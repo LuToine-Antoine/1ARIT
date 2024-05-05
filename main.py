@@ -254,6 +254,9 @@ class Grid:
 class CipherUI:
 
     def __init__(self):
+        """
+        Initialize the UI
+        """
         self._grid = Grid()
         self._under_mask = []
         self._root = tk.Tk()
@@ -261,7 +264,7 @@ class CipherUI:
         self._windows = self._root.geometry("800x900")
         self._canvas = tk.Canvas(self._root, height=600, width=1000)
 
-        # Initlialisation des espaces de text qui accueilleront les messages coddés et décoddés.
+        # Initlialisation des espaces de text qui accueilleront les messages coddés et décodés.
         self._text_to_cipher = tk.Text(self._root, height=5, width=70, relief="groove")
         self._text_ciphered = tk.Text(self._root, height=5, width=70, relief="groove")
 
@@ -387,6 +390,9 @@ class CipherUI:
         print("mask saved")
 
     def random(self):
+        """
+        Create a random mask
+        """
         self._under_mask = []
         for i in range(len(self._grid.get_mask())):
             for j in range(len(self._grid.get_mask())):
@@ -454,14 +460,7 @@ class CipherUI:
         click = ((event.x // (500//self._grid.get_mask_lenght())-1),
                  (event.y // (500 // self._grid.get_mask_lenght()))-1)
 
-        print("truc", self._under_mask[click[0]][click[1]])
-
-        if self._under_mask[click[0]][click[1]] == 2:
-            print("coucou")
-
-        elif self._under_mask[click[0]][click[1]] != 2:
-            print(self._under_mask[click[0]][click[1]])
-            print("bonjour")
+        if self._under_mask[click[0]][click[1]] != 2:
             self._grid.set_mask_by_user(click[0], click[1])
             self._canvas.delete("all")
             self.under_mask()
@@ -470,6 +469,10 @@ class CipherUI:
             self.set_under_mask()
 
     def set_under_mask(self):
+        """
+        Create the under mask to avoid hole superposition
+        :return:
+        """
         for i in range(self._grid.get_mask_lenght()):
             chunk = []
             for j in range(self._grid.get_mask_lenght()):
@@ -482,9 +485,15 @@ class CipherUI:
                     self._under_mask[i][j] = 2
 
     def get_under_mask(self):
+        """
+        Get the under mask
+        """
         return self._under_mask
 
     def under_mask(self):
+        """
+        Fill the under mask with 2 when the user tears a case
+        """
         self._under_mask = self.get_under_mask()
         for rotate in range(4):
             self._grid.mask_rotation()
@@ -492,8 +501,6 @@ class CipherUI:
                 for j in range(self._grid.get_mask_lenght()):
                     if self._grid.get_mask()[i][j] == 1:
                         self._under_mask[i][j] = 2
-
-        print(self._under_mask)
         self.draw_mask()
 
     def draw_mask(self):
@@ -530,4 +537,6 @@ class CipherUI:
                                               (i + 1) * taille_case + taille_case + 2,
                                               (j + 1) * taille_case + taille_case + 2, fill="white",
                                               outline="blue")
+
+
 grid_ui = CipherUI()
