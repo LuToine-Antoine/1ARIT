@@ -115,12 +115,10 @@ class Grid:
         Set the mask (0 and 1) from txt file
         """
         model = self.get_mask()
-        print("grille", (self.get_grid_lenght()))
         for i in range(self.get_grid_lenght()):
             for j in range(self.get_grid_lenght()):
                 if i < len(model) and j < len(model):
                     self._mask[i][j] = model[i][j]
-        print("mask", len(self._mask))
 
     def set_mask_by_user(self, x, y):
         """
@@ -197,10 +195,7 @@ class Grid:
         deciphered = []
         self.set_sentence(decipher_sentence)
         tes = self.adapt_sentence(decipher_sentence)
-        print("adapate", tes)
         sentenceToDecipher = list(decipher_sentence)
-
-        print("mask in decypher", self._mask)
 
         if len(self._mask) % 2 != 0:
             middle = len(sentenceToDecipher) // 2 - 2
@@ -242,23 +237,17 @@ class Grid:
         """
         len_grid = len(self._mask)
         self.set_grid_lenght(len_grid)
-        print("grid len \n", self.get_grid_lenght())
         self.grid_fill()
         self.set_sentence(sentence)
-        print("get sentence \n", self.get_sentence())
         self.adapt_sentence(sentence)
-        print("adapt sentence \n", self.adapt_sentence(sentence))
         maskLoad = self._mask
         self.mask_fill(maskLoad)
-        print("get mask \n", self._mask)
         grille = self.set_letter_in_grid()
-        print("grid \n", self._grid)
         cipherGrille = ''
 
         for row in grille:
             for letter in row:
                 cipherGrille += str(letter)
-        print(cipherGrille)
         return cipherGrille
 
 
@@ -278,7 +267,7 @@ class CipherUI:
 
         # Bouttons de droite
         self._load_button = tk.Button(self._root, height=1, width=10, text="Load", command=self.get_mask_file)
-        self._random_mask = tk.Button(self._root, height=1, width=10, text="Random")
+        self._random_mask = tk.Button(self._root, height=1, width=10, text="Random", command=self.random)
         self._save_button = tk.Button(self._root, height=1, width=10, text="Save", command=self.save_button)
         self._checkbutton_value_create = tk.IntVar()
         self._create_mask = tk.Checkbutton(self._root, height=1, width=10, text="Create",
@@ -293,7 +282,8 @@ class CipherUI:
         self._clear_button = tk.Button(self._root, height=2, width=20, text="Clear", command=self.clear_button)
         self._checkbutton_value_clock = tk.IntVar()
         self._clock = tk.Checkbutton(self._root, height=2, width=20, text="Clock",
-                                     variable=self._checkbutton_value_clock, onvalue=1, offvalue=0, command=self.checkbutton_set_value_clock)
+                                     variable=self._checkbutton_value_clock, onvalue=1, offvalue=0,
+                                     command=self.checkbutton_set_value_clock)
 
         # Canvas
         self._canvas.grid(row=0, column=0, sticky="nw", columnspan=6, rowspan=6)
@@ -322,9 +312,6 @@ class CipherUI:
         self._cypher_txt.grid(row=8, column=0, sticky="w")
         self._text_ciphered.grid(row=8, column=1, sticky="w")
 
-        # Récupère les cliques de l'utilisateur
-        print(self._checkbutton_value_create.get())
-
         # Lancement général
         self._root.mainloop()
 
@@ -336,9 +323,7 @@ class CipherUI:
         adaptated = self._grid.adapt_sentence(text_to_cipher)
         self._grid.set_sentence(adaptated)
         text_to_cipher = adaptated
-        print("mask : \n", self._grid.get_mask())
         ciphered_text = self._grid.cipher(text_to_cipher)
-        print("test", ciphered_text)
         self._text_ciphered.delete("1.0", "end")
         self._text_ciphered.insert("1.0", ciphered_text)
 
@@ -348,9 +333,7 @@ class CipherUI:
         """
         text_to_decipher = self._text_ciphered.get("1.0", "end-1c")
         adaptated = self._grid.adapt_sentence(text_to_decipher)
-        print("test", adaptated)
         self._grid.set_sentence(adaptated)
-        print("button", adaptated)
         text_to_decipher = adaptated
         self._grid.set_grid_lenght(len(text_to_decipher))
         deciphered_text = str(self._grid.decipher(text_to_decipher))
@@ -384,7 +367,6 @@ class CipherUI:
             self._grid.set_rotation(0)
         elif self._checkbutton_value_clock.get() == 1:
             self._grid.set_rotation(1)
-        print(self._grid.get_rotation())
 
     def save_button(self):
         """
@@ -401,6 +383,23 @@ class CipherUI:
         mask_file.close()
         print("mask saved")
 
+    def random(self):
+        under_mask = self.get_under_mask()
+        print(under_mask)
+        len_under_mask = len(under_mask)
+        print(len_under_mask)
+        x = rand.randint(0, len_under_mask-1)
+        y = rand.randint(0, len_under_mask-1)
+
+        print("x : ", x, "y : ", y)
+
+        if self._under_mask[x][y] != 2:
+            self._under_mask[x][y] = 1
+            print("bonjour")
+            print(self._under_mask)
+
+            self.under_mask()
+
     def set_mask_len(self):
         """
         Set the mask lenght with the user input
@@ -408,7 +407,6 @@ class CipherUI:
         temp_mask = []
         mask_len = self._ask_mask_len.get()
         self._grid.set_mask_lenght(mask_len)
-        print("mask lenght", self._grid.get_mask_lenght())
         if self._grid.get_mask_lenght() % 2 != 0:
             self._grid.set_mask_lenght(((self._grid.get_mask_lenght()**2)-1)//4)
         for i in range(self._grid.get_mask_lenght()):
@@ -419,7 +417,6 @@ class CipherUI:
         self._grid._mask = temp_mask
         self._canvas.delete("all")
         self.draw_mask()
-        print("mask : \n", self._grid.get_mask())
         return self._grid.get_mask()
 
     def get_mask_file(self):
@@ -449,8 +446,6 @@ class CipherUI:
         self._under_mask = self._grid.get_mask()
         self._grid.set_grid_lenght(len(self._text_to_cipher.get("1.0", "end-1c")))
         click = ((event.x // (500//self._grid.get_mask_lenght())-1), (event.y // (500 // self._grid.get_mask_lenght()))-1)
-        print(click)
-        print(click[0], click[1])
 
         if self._under_mask[click[0]][click[1]] != 2:
             self._grid.set_mask_by_user(click[0], click[1])
@@ -458,8 +453,19 @@ class CipherUI:
         self.under_mask()
         self.draw_mask()
 
+    def set_under_mask(self):
+        print("mask len in under ", self._grid.get_mask_lenght())
+        for i in range(self._grid.get_mask_lenght()):
+            chunk = []
+            for j in range(self._grid.get_mask_lenght()):
+                chunk.append(0)
+            self._under_mask.append(chunk)
+
+    def get_under_mask(self):
+        return self._under_mask
+
     def under_mask(self):
-        self._under_mask = self._grid.get_mask()
+        self._under_mask = self.get_under_mask()
         for rotate in range(4):
             for i in range(self._grid.get_mask_lenght()):
                 for j in range(self._grid.get_mask_lenght()):
@@ -476,8 +482,6 @@ class CipherUI:
         # Affiche la grille
         mask_len = self._grid.get_mask_lenght()
 
-        print("mask : \n", self._grid.get_mask())
-        print("longueur mask", mask_len)
         taille_case = 500 // mask_len
 
         for i in range(mask_len):
